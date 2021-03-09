@@ -31,6 +31,7 @@ struct location {
 	telephone tel;
 	char *date;
 	int enCours;
+	assurance uneAssurance;
 };
 typedef struct location location;
 
@@ -41,24 +42,25 @@ struct client {
 		u_int tabLocation_len;
 		location *tabLocation_val;
 	} tabLocation;
+	int nbLocation;
 };
 typedef struct client client;
 
 struct assurance {
-	char *type;
-	char *garantie;
+	int duree;
 	double prix;
+	int modePaiement;
 };
 typedef struct assurance assurance;
 
 struct enregistrerClientParam {
 	char *nom;
-	char *adress;
+	char *adresse;
 };
 typedef struct enregistrerClientParam enregistrerClientParam;
 
 struct majInformationClientParam {
-	client clt;
+	char *ancienNom;
 	char *nom;
 	char *adresse;
 };
@@ -66,18 +68,21 @@ typedef struct majInformationClientParam majInformationClientParam;
 
 struct effectuerLocationParam {
 	telephone tel;
-	client clt;
+	char *nom;
+	int nbLocation;
+	assurance uneAssurance;
 };
 typedef struct effectuerLocationParam effectuerLocationParam;
 
 struct annulerLocationParam {
 	int numLocation;
-	client clt;
+	char *nom;
 };
 typedef struct annulerLocationParam annulerLocationParam;
 
 struct programmerLivraisonParam {
-	client clt;
+	char *nom;
+	char *adresse;
 	telephone tel;
 };
 typedef struct programmerLivraisonParam programmerLivraisonParam;
@@ -99,27 +104,30 @@ extern  location * effectuer_location_1_svc(effectuerLocationParam *, struct svc
 extern  void * annuler_location_1(annulerLocationParam *, CLIENT *);
 extern  void * annuler_location_1_svc(annulerLocationParam *, struct svc_req *);
 #define afficher_nb_location 5
-extern  char * afficher_nb_location_1(client *, CLIENT *);
-extern  char * afficher_nb_location_1_svc(client *, struct svc_req *);
+extern  void * afficher_nb_location_1(client *, CLIENT *);
+extern  void * afficher_nb_location_1_svc(client *, struct svc_req *);
 #define afficher_location 6
-extern  char * afficher_location_1(client *, CLIENT *);
-extern  char * afficher_location_1_svc(client *, struct svc_req *);
+extern  void * afficher_location_1(client *, CLIENT *);
+extern  void * afficher_location_1_svc(client *, struct svc_req *);
 #define modifier_location 7
 extern  location * modifier_location_1(telephone *, CLIENT *);
 extern  location * modifier_location_1_svc(telephone *, struct svc_req *);
-#define afficher_type_assurance 8
-extern  char * afficher_type_assurance_1(void *, CLIENT *);
-extern  char * afficher_type_assurance_1_svc(void *, struct svc_req *);
-#define afficher_garantie 9
-extern  char * afficher_garantie_1(assurance *, CLIENT *);
-extern  char * afficher_garantie_1_svc(assurance *, struct svc_req *);
-#define afficher_liste_telephone 10
-extern  char * afficher_liste_telephone_1(void *, CLIENT *);
-extern  char * afficher_liste_telephone_1_svc(void *, struct svc_req *);
-#define programmer_livraison 11
+#define effectuer_assurance 8
+extern  assurance * effectuer_assurance_1(int *, CLIENT *);
+extern  assurance * effectuer_assurance_1_svc(int *, struct svc_req *);
+#define afficher_type_assurance 9
+extern  void * afficher_type_assurance_1(void *, CLIENT *);
+extern  void * afficher_type_assurance_1_svc(void *, struct svc_req *);
+#define afficher_garantie 10
+extern  void * afficher_garantie_1(assurance *, CLIENT *);
+extern  void * afficher_garantie_1_svc(assurance *, struct svc_req *);
+#define afficher_liste_telephone 11
+extern  void * afficher_liste_telephone_1(void *, CLIENT *);
+extern  void * afficher_liste_telephone_1_svc(void *, struct svc_req *);
+#define programmer_livraison 12
 extern  livraison * programmer_livraison_1(programmerLivraisonParam *, CLIENT *);
 extern  livraison * programmer_livraison_1_svc(programmerLivraisonParam *, struct svc_req *);
-#define annuler_livraison 12
+#define annuler_livraison 13
 extern  void * annuler_livraison_1(livraison *, CLIENT *);
 extern  void * annuler_livraison_1_svc(livraison *, struct svc_req *);
 extern int louetontel_prog_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
@@ -138,27 +146,30 @@ extern  location * effectuer_location_1_svc();
 extern  void * annuler_location_1();
 extern  void * annuler_location_1_svc();
 #define afficher_nb_location 5
-extern  char * afficher_nb_location_1();
-extern  char * afficher_nb_location_1_svc();
+extern  void * afficher_nb_location_1();
+extern  void * afficher_nb_location_1_svc();
 #define afficher_location 6
-extern  char * afficher_location_1();
-extern  char * afficher_location_1_svc();
+extern  void * afficher_location_1();
+extern  void * afficher_location_1_svc();
 #define modifier_location 7
 extern  location * modifier_location_1();
 extern  location * modifier_location_1_svc();
-#define afficher_type_assurance 8
-extern  char * afficher_type_assurance_1();
-extern  char * afficher_type_assurance_1_svc();
-#define afficher_garantie 9
-extern  char * afficher_garantie_1();
-extern  char * afficher_garantie_1_svc();
-#define afficher_liste_telephone 10
-extern  char * afficher_liste_telephone_1();
-extern  char * afficher_liste_telephone_1_svc();
-#define programmer_livraison 11
+#define effectuer_assurance 8
+extern  assurance * effectuer_assurance_1();
+extern  assurance * effectuer_assurance_1_svc();
+#define afficher_type_assurance 9
+extern  void * afficher_type_assurance_1();
+extern  void * afficher_type_assurance_1_svc();
+#define afficher_garantie 10
+extern  void * afficher_garantie_1();
+extern  void * afficher_garantie_1_svc();
+#define afficher_liste_telephone 11
+extern  void * afficher_liste_telephone_1();
+extern  void * afficher_liste_telephone_1_svc();
+#define programmer_livraison 12
 extern  livraison * programmer_livraison_1();
 extern  livraison * programmer_livraison_1_svc();
-#define annuler_livraison 12
+#define annuler_livraison 13
 extern  void * annuler_livraison_1();
 extern  void * annuler_livraison_1_svc();
 extern int louetontel_prog_1_freeresult ();

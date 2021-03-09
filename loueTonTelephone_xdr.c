@@ -42,6 +42,8 @@ xdr_location (XDR *xdrs, location *objp)
 		 return FALSE;
 	 if (!xdr_int (xdrs, &objp->enCours))
 		 return FALSE;
+	 if (!xdr_assurance (xdrs, &objp->uneAssurance))
+		 return FALSE;
 	return TRUE;
 }
 
@@ -57,6 +59,8 @@ xdr_client (XDR *xdrs, client *objp)
 	 if (!xdr_array (xdrs, (char **)&objp->tabLocation.tabLocation_val, (u_int *) &objp->tabLocation.tabLocation_len, ~0,
 		sizeof (location), (xdrproc_t) xdr_location))
 		 return FALSE;
+	 if (!xdr_int (xdrs, &objp->nbLocation))
+		 return FALSE;
 	return TRUE;
 }
 
@@ -65,11 +69,11 @@ xdr_assurance (XDR *xdrs, assurance *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_pointer (xdrs, (char **)&objp->type, sizeof (char), (xdrproc_t) xdr_char))
-		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->garantie, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_int (xdrs, &objp->duree))
 		 return FALSE;
 	 if (!xdr_double (xdrs, &objp->prix))
+		 return FALSE;
+	 if (!xdr_int (xdrs, &objp->modePaiement))
 		 return FALSE;
 	return TRUE;
 }
@@ -81,7 +85,7 @@ xdr_enregistrerClientParam (XDR *xdrs, enregistrerClientParam *objp)
 
 	 if (!xdr_pointer (xdrs, (char **)&objp->nom, sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->adress, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_pointer (xdrs, (char **)&objp->adresse, sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
 	return TRUE;
 }
@@ -91,7 +95,7 @@ xdr_majInformationClientParam (XDR *xdrs, majInformationClientParam *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_client (xdrs, &objp->clt))
+	 if (!xdr_pointer (xdrs, (char **)&objp->ancienNom, sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
 	 if (!xdr_pointer (xdrs, (char **)&objp->nom, sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
@@ -107,7 +111,11 @@ xdr_effectuerLocationParam (XDR *xdrs, effectuerLocationParam *objp)
 
 	 if (!xdr_telephone (xdrs, &objp->tel))
 		 return FALSE;
-	 if (!xdr_client (xdrs, &objp->clt))
+	 if (!xdr_pointer (xdrs, (char **)&objp->nom, sizeof (char), (xdrproc_t) xdr_char))
+		 return FALSE;
+	 if (!xdr_int (xdrs, &objp->nbLocation))
+		 return FALSE;
+	 if (!xdr_assurance (xdrs, &objp->uneAssurance))
 		 return FALSE;
 	return TRUE;
 }
@@ -119,7 +127,7 @@ xdr_annulerLocationParam (XDR *xdrs, annulerLocationParam *objp)
 
 	 if (!xdr_int (xdrs, &objp->numLocation))
 		 return FALSE;
-	 if (!xdr_client (xdrs, &objp->clt))
+	 if (!xdr_pointer (xdrs, (char **)&objp->nom, sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
 	return TRUE;
 }
@@ -129,7 +137,9 @@ xdr_programmerLivraisonParam (XDR *xdrs, programmerLivraisonParam *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_client (xdrs, &objp->clt))
+	 if (!xdr_pointer (xdrs, (char **)&objp->nom, sizeof (char), (xdrproc_t) xdr_char))
+		 return FALSE;
+	 if (!xdr_pointer (xdrs, (char **)&objp->adresse, sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
 	 if (!xdr_telephone (xdrs, &objp->tel))
 		 return FALSE;
