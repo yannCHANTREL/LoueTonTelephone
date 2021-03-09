@@ -1,14 +1,14 @@
 struct livraison {char * adresse; char * dateCommande;};
 struct telephone {char * appareil; double prix;};
-struct location {int num; telephone tel; char * date; int enCours;};
+struct location {int num; telephone tel; char * date; int enCours; assurance uneAssurance;};
 struct client {char * nom; char * adresse; location tabLocation<>; int nbLocation;};
-struct assurance {char * type; char * garantie; double prix;};
+struct assurance {int duree; double prix; int modePaiement;};
 
 struct enregistrerClientParam {char * nom; char * adresse;};
-struct majInformationClientParam {client clt; char * nom; char * adresse;};
-struct effectuerLocationParam {telephone tel; client clt;};
-struct annulerLocationParam {int numLocation; client clt;};
-struct programmerLivraisonParam {client clt; telephone tel;};
+struct majInformationClientParam {char * ancienNom; char * nom; char * adresse;};
+struct effectuerLocationParam {telephone tel; char * nom; int nbLocation; assurance uneAssurance;};
+struct annulerLocationParam {int numLocation; char * nom;};
+struct programmerLivraisonParam {char * nom; char * adresse; telephone tel;};
 
 program LOUETONTEL_PROG {
 	version LOUETONTEL_VERSION_1{
@@ -19,19 +19,20 @@ program LOUETONTEL_PROG {
 		/*Gestion des locations*/
 		location effectuer_location(effectuerLocationParam) = 3;
 		void annuler_location(annulerLocationParam) = 4;
-		char afficher_nb_location(client clt) = 5;
-		char afficher_location(client clt) = 6;
-		location modifier_location(telephone tel) = 7;
+		void afficher_nb_location(client) = 5;
+		void afficher_location(client) = 6;
+		location modifier_location(telephone) = 7;
 		
 		/*Gestion des assurances*/
-		char afficher_type_assurance() = 8;
-		char afficher_garantie(assurance assur) = 9;
+		assurance effectuer_assurance(int) = 8;
+		void afficher_type_assurance() = 9;
+		void afficher_garantie(assurance) = 10;
 		
 		/*Gestion des mobiles*/
-		char afficher_liste_telephone() = 10;
+		void afficher_liste_telephone() = 11;
 		
 		/*Gestion des livraisons*/
-		livraison programmer_livraison(programmerLivraisonParam) = 11;
-		void annuler_livraison(livraison) = 12;
+		livraison programmer_livraison(programmerLivraisonParam) = 12;
+		void annuler_livraison(livraison) = 13;
 	} = 1;
 } = 0x20000001;

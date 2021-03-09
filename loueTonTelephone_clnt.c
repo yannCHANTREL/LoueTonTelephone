@@ -69,7 +69,7 @@ annuler_location_1(annulerLocationParam *argp, CLIENT *clnt)
 	return ((void *)&clnt_res);
 }
 
-char *
+void *
 afficher_nb_location_1(client *argp, CLIENT *clnt)
 {
 	static char clnt_res;
@@ -77,14 +77,14 @@ afficher_nb_location_1(client *argp, CLIENT *clnt)
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, afficher_nb_location,
 		(xdrproc_t) xdr_client, (caddr_t) argp,
-		(xdrproc_t) xdr_char, (caddr_t) &clnt_res,
+		(xdrproc_t) xdr_void, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
 	}
-	return (&clnt_res);
+	return ((void *)&clnt_res);
 }
 
-char *
+void *
 afficher_location_1(client *argp, CLIENT *clnt)
 {
 	static char clnt_res;
@@ -92,11 +92,11 @@ afficher_location_1(client *argp, CLIENT *clnt)
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, afficher_location,
 		(xdrproc_t) xdr_client, (caddr_t) argp,
-		(xdrproc_t) xdr_char, (caddr_t) &clnt_res,
+		(xdrproc_t) xdr_void, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
 	}
-	return (&clnt_res);
+	return ((void *)&clnt_res);
 }
 
 location *
@@ -114,7 +114,22 @@ modifier_location_1(telephone *argp, CLIENT *clnt)
 	return (&clnt_res);
 }
 
-char *
+assurance *
+effectuer_assurance_1(int *argp, CLIENT *clnt)
+{
+	static assurance clnt_res;
+
+	memset((char *)&clnt_res, 0, sizeof(clnt_res));
+	if (clnt_call (clnt, effectuer_assurance,
+		(xdrproc_t) xdr_int, (caddr_t) argp,
+		(xdrproc_t) xdr_assurance, (caddr_t) &clnt_res,
+		TIMEOUT) != RPC_SUCCESS) {
+		return (NULL);
+	}
+	return (&clnt_res);
+}
+
+void *
 afficher_type_assurance_1(void *argp, CLIENT *clnt)
 {
 	static char clnt_res;
@@ -122,14 +137,14 @@ afficher_type_assurance_1(void *argp, CLIENT *clnt)
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, afficher_type_assurance,
 		(xdrproc_t) xdr_void, (caddr_t) argp,
-		(xdrproc_t) xdr_char, (caddr_t) &clnt_res,
+		(xdrproc_t) xdr_void, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
 	}
-	return (&clnt_res);
+	return ((void *)&clnt_res);
 }
 
-char *
+void *
 afficher_garantie_1(assurance *argp, CLIENT *clnt)
 {
 	static char clnt_res;
@@ -137,14 +152,14 @@ afficher_garantie_1(assurance *argp, CLIENT *clnt)
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, afficher_garantie,
 		(xdrproc_t) xdr_assurance, (caddr_t) argp,
-		(xdrproc_t) xdr_char, (caddr_t) &clnt_res,
+		(xdrproc_t) xdr_void, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
 	}
-	return (&clnt_res);
+	return ((void *)&clnt_res);
 }
 
-char *
+void *
 afficher_liste_telephone_1(void *argp, CLIENT *clnt)
 {
 	static char clnt_res;
@@ -152,11 +167,11 @@ afficher_liste_telephone_1(void *argp, CLIENT *clnt)
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, afficher_liste_telephone,
 		(xdrproc_t) xdr_void, (caddr_t) argp,
-		(xdrproc_t) xdr_char, (caddr_t) &clnt_res,
+		(xdrproc_t) xdr_void, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
 	}
-	return (&clnt_res);
+	return ((void *)&clnt_res);
 }
 
 livraison *
