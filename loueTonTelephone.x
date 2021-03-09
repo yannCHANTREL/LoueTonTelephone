@@ -1,10 +1,10 @@
 struct livraison {char * adresse; char * dateCommande;};
 struct telephone {char * appareil; double prix;};
 struct location {int num; telephone tel; char * date; int enCours;};
-struct client {char * nom; char * adresse; location tabLocation<>;};
+struct client {char * nom; char * adresse; location tabLocation<>; int nbLocation;};
 struct assurance {char * type; char * garantie; double prix;};
 
-struct enregistrerClientParam {char * nom; char * adress;};
+struct enregistrerClientParam {char * nom; char * adresse;};
 struct majInformationClientParam {client clt; char * nom; char * adresse;};
 struct effectuerLocationParam {telephone tel; client clt;};
 struct annulerLocationParam {int numLocation; client clt;};

@@ -6,146 +6,100 @@
 
 #include "loueTonTelephone.h"
 
-client *
-enregistrer_client_1_svc(enregistrerClientParam *argp, struct svc_req *rqstp)
-{
+client * enregistrer_client_1_svc(enregistrerClientParam *argp, struct svc_req *rqstp) {
 	static client  result;
 
-	/*
-	 * insert server code here
-	 */
+	enregistrerClientParam monClient = *argp;
+	result.nom = monClient.nom;
+	result.adresse = monClient.adresse;
 
 	return &result;
 }
 
-client *
-maj_information_client_1_svc(majInformationClientParam *argp, struct svc_req *rqstp)
-{
+client * maj_information_client_1_svc(majInformationClientParam *argp, struct svc_req *rqstp) {
 	static client  result;
 
-	/*
-	 * insert server code here
-	 */
+	
 
 	return &result;
 }
 
-location *
-effectuer_location_1_svc(effectuerLocationParam *argp, struct svc_req *rqstp)
-{
+location * effectuer_location_1_svc(effectuerLocationParam *argp, struct svc_req *rqstp) {
 	static location  result;
 
-	/*
-	 * insert server code here
-	 */
+	
 
 	return &result;
 }
 
-void *
-annuler_location_1_svc(annulerLocationParam *argp, struct svc_req *rqstp)
-{
+void * annuler_location_1_svc(annulerLocationParam *argp, struct svc_req *rqstp) {
 	static char * result;
 
-	/*
-	 * insert server code here
-	 */
+
 
 	return (void *) &result;
 }
 
-char *
-afficher_nb_location_1_svc(client *argp, struct svc_req *rqstp)
-{
+char * afficher_nb_location_1_svc(client *argp, struct svc_req *rqstp) {
 	static char  result;
 
-	/*
-	 * insert server code here
-	 */
+	
 
 	return &result;
 }
 
-char *
-afficher_location_1_svc(client *argp, struct svc_req *rqstp)
-{
+char * afficher_location_1_svc(client *argp, struct svc_req *rqstp) {
 	static char  result;
 
-	/*
-	 * insert server code here
-	 */
+	
 
 	return &result;
 }
 
-location *
-modifier_location_1_svc(telephone *argp, struct svc_req *rqstp)
-{
+location * modifier_location_1_svc(telephone *argp, struct svc_req *rqstp) {
 	static location  result;
 
-	/*
-	 * insert server code here
-	 */
+	
 
 	return &result;
 }
 
-char *
-afficher_type_assurance_1_svc(void *argp, struct svc_req *rqstp)
-{
+char * afficher_type_assurance_1_svc(void *argp, struct svc_req *rqstp) {
 	static char  result;
 
-	/*
-	 * insert server code here
-	 */
+	
 
 	return &result;
 }
 
-char *
-afficher_garantie_1_svc(assurance *argp, struct svc_req *rqstp)
-{
+char * afficher_garantie_1_svc(assurance *argp, struct svc_req *rqstp) {
 	static char  result;
 
-	/*
-	 * insert server code here
-	 */
+	
 
 	return &result;
 }
 
-char *
-afficher_liste_telephone_1_svc(void *argp, struct svc_req *rqstp)
-{
+char * afficher_liste_telephone_1_svc(void *argp, struct svc_req *rqstp) {
 	static char  result;
 
-	/*
-	 * insert server code here
-	 */
+	
 
 	return &result;
 }
 
-livraison *
-programmer_livraison_1_svc(programmerLivraisonParam *argp, struct svc_req *rqstp)
-{
+livraison * programmer_livraison_1_svc(programmerLivraisonParam *argp, struct svc_req *rqstp) {
 	static livraison  result;
 
-	/*
-	 * insert server code here
-	 */
+	
 
 	return &result;
 }
 
-void *
-annuler_livraison_1_svc(livraison *argp, struct svc_req *rqstp)
-{
+void * annuler_livraison_1_svc(livraison *argp, struct svc_req *rqstp) {
 	static char * result;
 
-	/*
-	 * insert server code here
-	 */
+	
 
 	return (void *) &result;
 }
