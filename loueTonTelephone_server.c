@@ -9,7 +9,53 @@
 #include "loueTonTelephone.h"
 
 client listeClient<>;
-int nbClient = 0;
+int nbClient;
+telephone listeTelephone[3];
+
+void * allumer_application_1_svc(void *argp, struct svc_req *rqstp) {
+	nbClient = 0;
+	
+	information info1;
+	info1.processeur = "Helio P60";
+	info1.ram = 3;
+	info1.tailleEcran = 6.0;
+	info1.autonomie = 12;
+	info1.memoire = 128;
+	info1.qualiteCamera = 8;
+	info1.systemeExploitation = "Android Nougat";
+	information info2;
+	info2.processeur = "Kirin 970";
+	info2.ram = 4;
+	info2.tailleEcran = 6.0;
+	info2.autonomie = 12;
+	info2.memoire = 128;
+	info2.qualiteCamera = 10;
+	info2.systemeExploitation = "Android Oréo";
+	information info3;
+	info3.processeur = "Snapdragon 845";
+	info3.ram = 6;
+	info3.tailleEcran = 6.4;
+	info3.autonomie = 12;
+	info3.memoire = 256;
+	info3.qualiteCamera = 10;
+	info3.systemeExploitation = "Android Oréo";
+	
+	telephone tel1;
+	tel1.appareil = "Galaxy S20 FE";
+	tel1.prix = 659.0;
+	tel1.mesInformations = info1;
+	telephone tel2;
+	tel2.appareil = "Galaxy S20";
+	tel2.prix = 909.0;
+	tel2.mesInformations = info2;
+	telephone tel3;
+	tel3.appareil = "Galaxy S20+";
+	tel3.prix = 1009.0;
+	tel3.mesInformations = info3;
+	listeTelephone[0] = tel1;
+	listeTelephone[1] = tel2;
+	listeTelephone[2] = tel3;
+}
 
 client * enregistrer_client_1_svc(enregistrerClientParam *argp, struct svc_req *rqstp) {
 	enregistrerClientParam monClient = *argp;
@@ -113,12 +159,15 @@ void * afficher_nb_location_1_svc(client *argp, struct svc_req *rqstp) {
 		if (strcmp(clientActuel.nom, monClient.nom) == 0) {
 			for (int j = 0; j < monClient.nbLocation; j++) {
 				location locationActuel = monClient.tabLocation[j];
+				// La location est en cours ?
 				if (locationActuel.enCours == 1) {
+					// On incrémente le compteur
 					nbLocationEnCours++;
 				}
 			}
 		}
 	}
+	// Affichage du nombre de location en cours
 	printf("afficher_nb_location - Le client nommé %s a %d location en cours\n",monClient.nom,nbLocationEnCours);
 }
 
@@ -141,16 +190,19 @@ void * afficher_location_1_svc(client *argp, struct svc_req *rqstp) {
 					location locationActuel = monClient.tabLocation[j];
 					telephone tel = locationActuel.tel;
 					assurance monAssurance = locationActuel.uneAssurance;
+					// Location en cours ?
 					char enCours = "Non";
 					if (locationActuel.enCours == 1) {
 						enCours = "Oui";
 					}
+					// Location avec assurance ?
 					char typeAssurance = "sans assurance";
 					if (monAssurance.modePaiement == 1) {
 						typeAssurance = "avec assurance (paiement en mensualité)";
 					} else if (monAssurance.modePaiement == 2) {
 						typeAssurance = "avec assurance (paiement unique)"; 
 					}
+					// Affichage des informations sur la location
 					printf("Location numéro : %d - Téléphone : %s - Date de début : %s - En cours : %s - Type d'assurance : %s\n",locationActuel.num,tel.appareil,ctime(&t),enCours,typeAssurance);
 				}
 			}
@@ -158,11 +210,28 @@ void * afficher_location_1_svc(client *argp, struct svc_req *rqstp) {
 	}
 }
 
-location * modifier_location_1_svc(telephone *argp, struct svc_req *rqstp) {
-	static location  result;
-
-	
-
+location * modifier_location_1_svc(modifierLocationParam *argp, struct svc_req *rqstp) {
+	static location result;
+	modifierLocationParam data = *argp;
+	// Recherche du client
+	for (int i = 0; i < nbClient; i++) {
+		client clientActuel = listeClient[i];
+		// Existe t-il ?
+		if (strcmp(clientActuel.nom, data.nom) == 0) {
+			// On crée une nouvelle location
+			result.num = data.num;
+			result.tel = data.tel;
+			time_t t = time(NULL); // Recupère la date du jour
+			result.date = ctime(&t); // On l'attribut (en tant que char)
+			result.enCours = 1;
+			result.uneAssurance = data.uneAssurance;
+			// On met a jour la location cible
+			clientActuel.tabLocation[data.num] = result;
+		}
+	}
+	assurance uneAssurance = data.uneAssurance;
+	telephone tel = data.tel;
+	printf("modifier_location - Le client nommé %s a modifié la location numéro %d, lui attribuant le téléphone nommé %s. Celle-ci prend effet immédiatement, et ce terminera dans %d\n",data.nom,data.num,tel.appareil,uneAssurance.duree);
 	return &result;
 }
 
@@ -196,7 +265,31 @@ void * afficher_garantie_1_svc(assurance *argp, struct svc_req *rqstp) {
 }
 
 void * afficher_liste_telephone_1_svc(void *argp, struct svc_req *rqstp) {
-	
+	printf("afficher_liste_telephone - Les téléphones disponibles sont les suivants :\n");
+	for (int i = 0; i < 3; i++) {
+		telephone telActuel = listeTelephone[i];
+		printf("mobile numéro %d - Nom : %s - Prix de l'appreil : %ld\n",i,telActuel.appareil,telActuel.prix);
+	}
+}
+
+telephone * choisir_son_telephone_1_svc(int *argp, struct svc_req *rqstp) {
+	static telephone result = listeTelephone[*argp];
+	return &result;
+}
+
+void * afficher_information_telephone_1_svc(int *argp, struct svc_req *rqstp) {
+	// On récupère le téléphone
+	telephone tel = listeTelephone[*argp];
+	informations info = tel.mesInformations;
+	printf("afficher_information_telephone - Téléphone numéro %d : Informations générale :\n",*argp);
+	// on communique chaque informations du téléphone
+	printf("Processeur : %s\n",info.processeur);
+	printf("RAM : %d Go\n",info.ram);
+	printf("Taille de l'écran : %ld pouces\n",info.tailleEcran);
+	printf("Autonomie estimé : %d heures\n",info.autonomie);
+	printf("Mémoire interne : %d Go\n",info.memoire);
+	printf("Résolution de la caméra : %d mégapixels\n",info.qualiteCamera);
+	printf("Système d'exploitation : %s\n",info.systemeExploitation);
 }
 
 livraison * programmer_livraison_1_svc(programmerLivraisonParam *argp, struct svc_req *rqstp) {

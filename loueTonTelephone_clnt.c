@@ -9,6 +9,21 @@
 /* Default timeout can be changed using clnt_control() */
 static struct timeval TIMEOUT = { 25, 0 };
 
+void *
+allumer_application_1(void *argp, CLIENT *clnt)
+{
+	static char clnt_res;
+
+	memset((char *)&clnt_res, 0, sizeof(clnt_res));
+	if (clnt_call (clnt, allumer_application,
+		(xdrproc_t) xdr_void, (caddr_t) argp,
+		(xdrproc_t) xdr_void, (caddr_t) &clnt_res,
+		TIMEOUT) != RPC_SUCCESS) {
+		return (NULL);
+	}
+	return ((void *)&clnt_res);
+}
+
 client *
 enregistrer_client_1(enregistrerClientParam *argp, CLIENT *clnt)
 {
@@ -100,13 +115,13 @@ afficher_location_1(client *argp, CLIENT *clnt)
 }
 
 location *
-modifier_location_1(telephone *argp, CLIENT *clnt)
+modifier_location_1(modifierLocationParam *argp, CLIENT *clnt)
 {
 	static location clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, modifier_location,
-		(xdrproc_t) xdr_telephone, (caddr_t) argp,
+		(xdrproc_t) xdr_modifierLocationParam, (caddr_t) argp,
 		(xdrproc_t) xdr_location, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
@@ -167,6 +182,36 @@ afficher_liste_telephone_1(void *argp, CLIENT *clnt)
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, afficher_liste_telephone,
 		(xdrproc_t) xdr_void, (caddr_t) argp,
+		(xdrproc_t) xdr_void, (caddr_t) &clnt_res,
+		TIMEOUT) != RPC_SUCCESS) {
+		return (NULL);
+	}
+	return ((void *)&clnt_res);
+}
+
+telephone *
+choisir_son_telephone_1(int *argp, CLIENT *clnt)
+{
+	static telephone clnt_res;
+
+	memset((char *)&clnt_res, 0, sizeof(clnt_res));
+	if (clnt_call (clnt, choisir_son_telephone,
+		(xdrproc_t) xdr_int, (caddr_t) argp,
+		(xdrproc_t) xdr_telephone, (caddr_t) &clnt_res,
+		TIMEOUT) != RPC_SUCCESS) {
+		return (NULL);
+	}
+	return (&clnt_res);
+}
+
+void *
+afficher_information_telephone_1(int *argp, CLIENT *clnt)
+{
+	static char clnt_res;
+
+	memset((char *)&clnt_res, 0, sizeof(clnt_res));
+	if (clnt_call (clnt, afficher_information_telephone,
+		(xdrproc_t) xdr_int, (caddr_t) argp,
 		(xdrproc_t) xdr_void, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);

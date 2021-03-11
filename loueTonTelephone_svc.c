@@ -26,9 +26,11 @@ louetontel_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		annulerLocationParam annuler_location_1_arg;
 		client afficher_nb_location_1_arg;
 		client afficher_location_1_arg;
-		telephone modifier_location_1_arg;
+		modifierLocationParam modifier_location_1_arg;
 		int effectuer_assurance_1_arg;
 		assurance afficher_garantie_1_arg;
+		int choisir_son_telephone_1_arg;
+		int afficher_information_telephone_1_arg;
 		programmerLivraisonParam programmer_livraison_1_arg;
 		livraison annuler_livraison_1_arg;
 	} argument;
@@ -40,6 +42,12 @@ louetontel_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 	case NULLPROC:
 		(void) svc_sendreply (transp, (xdrproc_t) xdr_void, (char *)NULL);
 		return;
+
+	case allumer_application:
+		_xdr_argument = (xdrproc_t) xdr_void;
+		_xdr_result = (xdrproc_t) xdr_void;
+		local = (char *(*)(char *, struct svc_req *)) allumer_application_1_svc;
+		break;
 
 	case enregistrer_client:
 		_xdr_argument = (xdrproc_t) xdr_enregistrerClientParam;
@@ -78,7 +86,7 @@ louetontel_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		break;
 
 	case modifier_location:
-		_xdr_argument = (xdrproc_t) xdr_telephone;
+		_xdr_argument = (xdrproc_t) xdr_modifierLocationParam;
 		_xdr_result = (xdrproc_t) xdr_location;
 		local = (char *(*)(char *, struct svc_req *)) modifier_location_1_svc;
 		break;
@@ -105,6 +113,18 @@ louetontel_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		_xdr_argument = (xdrproc_t) xdr_void;
 		_xdr_result = (xdrproc_t) xdr_void;
 		local = (char *(*)(char *, struct svc_req *)) afficher_liste_telephone_1_svc;
+		break;
+
+	case choisir_son_telephone:
+		_xdr_argument = (xdrproc_t) xdr_int;
+		_xdr_result = (xdrproc_t) xdr_telephone;
+		local = (char *(*)(char *, struct svc_req *)) choisir_son_telephone_1_svc;
+		break;
+
+	case afficher_information_telephone:
+		_xdr_argument = (xdrproc_t) xdr_int;
+		_xdr_result = (xdrproc_t) xdr_void;
+		local = (char *(*)(char *, struct svc_req *)) afficher_information_telephone_1_svc;
 		break;
 
 	case programmer_livraison:

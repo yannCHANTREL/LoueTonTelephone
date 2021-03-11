@@ -15,14 +15,27 @@ extern "C" {
 
 
 struct livraison {
+	char *nom;
 	char *adresse;
-	char *dateCommande;
+	telephone tel;
 };
 typedef struct livraison livraison;
+
+struct information {
+	char *processeur;
+	int ram;
+	double tailleEcran;
+	int autonomie;
+	int memoire;
+	int qualiteCamera;
+	char *systemeExploitation;
+};
+typedef struct information information;
 
 struct telephone {
 	char *appareil;
 	double prix;
+	information mesInformations;
 };
 typedef struct telephone telephone;
 
@@ -80,6 +93,14 @@ struct annulerLocationParam {
 };
 typedef struct annulerLocationParam annulerLocationParam;
 
+struct modifierLocationParam {
+	telephone tel;
+	char *nom;
+	int num;
+	assurance uneAssurance;
+};
+typedef struct modifierLocationParam modifierLocationParam;
+
 struct programmerLivraisonParam {
 	char *nom;
 	char *adresse;
@@ -91,85 +112,103 @@ typedef struct programmerLivraisonParam programmerLivraisonParam;
 #define LOUETONTEL_VERSION_1 1
 
 #if defined(__STDC__) || defined(__cplusplus)
-#define enregistrer_client 1
+#define allumer_application 1
+extern  void * allumer_application_1(void *, CLIENT *);
+extern  void * allumer_application_1_svc(void *, struct svc_req *);
+#define enregistrer_client 2
 extern  client * enregistrer_client_1(enregistrerClientParam *, CLIENT *);
 extern  client * enregistrer_client_1_svc(enregistrerClientParam *, struct svc_req *);
-#define maj_information_client 2
+#define maj_information_client 3
 extern  client * maj_information_client_1(majInformationClientParam *, CLIENT *);
 extern  client * maj_information_client_1_svc(majInformationClientParam *, struct svc_req *);
-#define effectuer_location 3
+#define effectuer_location 4
 extern  location * effectuer_location_1(effectuerLocationParam *, CLIENT *);
 extern  location * effectuer_location_1_svc(effectuerLocationParam *, struct svc_req *);
-#define annuler_location 4
+#define annuler_location 5
 extern  void * annuler_location_1(annulerLocationParam *, CLIENT *);
 extern  void * annuler_location_1_svc(annulerLocationParam *, struct svc_req *);
-#define afficher_nb_location 5
+#define afficher_nb_location 6
 extern  void * afficher_nb_location_1(client *, CLIENT *);
 extern  void * afficher_nb_location_1_svc(client *, struct svc_req *);
-#define afficher_location 6
+#define afficher_location 7
 extern  void * afficher_location_1(client *, CLIENT *);
 extern  void * afficher_location_1_svc(client *, struct svc_req *);
-#define modifier_location 7
-extern  location * modifier_location_1(telephone *, CLIENT *);
-extern  location * modifier_location_1_svc(telephone *, struct svc_req *);
-#define effectuer_assurance 8
+#define modifier_location 8
+extern  location * modifier_location_1(modifierLocationParam *, CLIENT *);
+extern  location * modifier_location_1_svc(modifierLocationParam *, struct svc_req *);
+#define effectuer_assurance 9
 extern  assurance * effectuer_assurance_1(int *, CLIENT *);
 extern  assurance * effectuer_assurance_1_svc(int *, struct svc_req *);
-#define afficher_type_assurance 9
+#define afficher_type_assurance 10
 extern  void * afficher_type_assurance_1(void *, CLIENT *);
 extern  void * afficher_type_assurance_1_svc(void *, struct svc_req *);
-#define afficher_garantie 10
+#define afficher_garantie 11
 extern  void * afficher_garantie_1(assurance *, CLIENT *);
 extern  void * afficher_garantie_1_svc(assurance *, struct svc_req *);
-#define afficher_liste_telephone 11
+#define afficher_liste_telephone 12
 extern  void * afficher_liste_telephone_1(void *, CLIENT *);
 extern  void * afficher_liste_telephone_1_svc(void *, struct svc_req *);
-#define programmer_livraison 12
+#define choisir_son_telephone 13
+extern  telephone * choisir_son_telephone_1(int *, CLIENT *);
+extern  telephone * choisir_son_telephone_1_svc(int *, struct svc_req *);
+#define afficher_information_telephone 14
+extern  void * afficher_information_telephone_1(int *, CLIENT *);
+extern  void * afficher_information_telephone_1_svc(int *, struct svc_req *);
+#define programmer_livraison 15
 extern  livraison * programmer_livraison_1(programmerLivraisonParam *, CLIENT *);
 extern  livraison * programmer_livraison_1_svc(programmerLivraisonParam *, struct svc_req *);
-#define annuler_livraison 13
+#define annuler_livraison 16
 extern  void * annuler_livraison_1(livraison *, CLIENT *);
 extern  void * annuler_livraison_1_svc(livraison *, struct svc_req *);
 extern int louetontel_prog_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
 
 #else /* K&R C */
-#define enregistrer_client 1
+#define allumer_application 1
+extern  void * allumer_application_1();
+extern  void * allumer_application_1_svc();
+#define enregistrer_client 2
 extern  client * enregistrer_client_1();
 extern  client * enregistrer_client_1_svc();
-#define maj_information_client 2
+#define maj_information_client 3
 extern  client * maj_information_client_1();
 extern  client * maj_information_client_1_svc();
-#define effectuer_location 3
+#define effectuer_location 4
 extern  location * effectuer_location_1();
 extern  location * effectuer_location_1_svc();
-#define annuler_location 4
+#define annuler_location 5
 extern  void * annuler_location_1();
 extern  void * annuler_location_1_svc();
-#define afficher_nb_location 5
+#define afficher_nb_location 6
 extern  void * afficher_nb_location_1();
 extern  void * afficher_nb_location_1_svc();
-#define afficher_location 6
+#define afficher_location 7
 extern  void * afficher_location_1();
 extern  void * afficher_location_1_svc();
-#define modifier_location 7
+#define modifier_location 8
 extern  location * modifier_location_1();
 extern  location * modifier_location_1_svc();
-#define effectuer_assurance 8
+#define effectuer_assurance 9
 extern  assurance * effectuer_assurance_1();
 extern  assurance * effectuer_assurance_1_svc();
-#define afficher_type_assurance 9
+#define afficher_type_assurance 10
 extern  void * afficher_type_assurance_1();
 extern  void * afficher_type_assurance_1_svc();
-#define afficher_garantie 10
+#define afficher_garantie 11
 extern  void * afficher_garantie_1();
 extern  void * afficher_garantie_1_svc();
-#define afficher_liste_telephone 11
+#define afficher_liste_telephone 12
 extern  void * afficher_liste_telephone_1();
 extern  void * afficher_liste_telephone_1_svc();
-#define programmer_livraison 12
+#define choisir_son_telephone 13
+extern  telephone * choisir_son_telephone_1();
+extern  telephone * choisir_son_telephone_1_svc();
+#define afficher_information_telephone 14
+extern  void * afficher_information_telephone_1();
+extern  void * afficher_information_telephone_1_svc();
+#define programmer_livraison 15
 extern  livraison * programmer_livraison_1();
 extern  livraison * programmer_livraison_1_svc();
-#define annuler_livraison 13
+#define annuler_livraison 16
 extern  void * annuler_livraison_1();
 extern  void * annuler_livraison_1_svc();
 extern int louetontel_prog_1_freeresult ();
@@ -179,6 +218,7 @@ extern int louetontel_prog_1_freeresult ();
 
 #if defined(__STDC__) || defined(__cplusplus)
 extern  bool_t xdr_livraison (XDR *, livraison*);
+extern  bool_t xdr_information (XDR *, information*);
 extern  bool_t xdr_telephone (XDR *, telephone*);
 extern  bool_t xdr_location (XDR *, location*);
 extern  bool_t xdr_client (XDR *, client*);
@@ -187,10 +227,12 @@ extern  bool_t xdr_enregistrerClientParam (XDR *, enregistrerClientParam*);
 extern  bool_t xdr_majInformationClientParam (XDR *, majInformationClientParam*);
 extern  bool_t xdr_effectuerLocationParam (XDR *, effectuerLocationParam*);
 extern  bool_t xdr_annulerLocationParam (XDR *, annulerLocationParam*);
+extern  bool_t xdr_modifierLocationParam (XDR *, modifierLocationParam*);
 extern  bool_t xdr_programmerLivraisonParam (XDR *, programmerLivraisonParam*);
 
 #else /* K&R C */
 extern bool_t xdr_livraison ();
+extern bool_t xdr_information ();
 extern bool_t xdr_telephone ();
 extern bool_t xdr_location ();
 extern bool_t xdr_client ();
@@ -199,6 +241,7 @@ extern bool_t xdr_enregistrerClientParam ();
 extern bool_t xdr_majInformationClientParam ();
 extern bool_t xdr_effectuerLocationParam ();
 extern bool_t xdr_annulerLocationParam ();
+extern bool_t xdr_modifierLocationParam ();
 extern bool_t xdr_programmerLivraisonParam ();
 
 #endif /* K&R C */

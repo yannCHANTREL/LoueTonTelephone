@@ -11,31 +11,37 @@ void
 louetontel_prog_1(char *host)
 {
 	CLIENT *clnt;
-	client  *result_1;
-	enregistrerClientParam  enregistrer_client_1_arg;
+	void  *result_1;
+	char *allumer_application_1_arg;
 	client  *result_2;
+	enregistrerClientParam  enregistrer_client_1_arg;
+	client  *result_3;
 	majInformationClientParam  maj_information_client_1_arg;
-	location  *result_3;
+	location  *result_4;
 	effectuerLocationParam  effectuer_location_1_arg;
-	void  *result_4;
-	annulerLocationParam  annuler_location_1_arg;
 	void  *result_5;
-	client  afficher_nb_location_1_arg;
+	annulerLocationParam  annuler_location_1_arg;
 	void  *result_6;
+	client  afficher_nb_location_1_arg;
+	void  *result_7;
 	client  afficher_location_1_arg;
-	location  *result_7;
-	telephone  modifier_location_1_arg;
-	assurance  *result_8;
+	location  *result_8;
+	modifierLocationParam  modifier_location_1_arg;
+	assurance  *result_9;
 	int  effectuer_assurance_1_arg;
-	void  *result_9;
-	char *afficher_type_assurance_1_arg;
 	void  *result_10;
-	assurance  afficher_garantie_1_arg;
+	char *afficher_type_assurance_1_arg;
 	void  *result_11;
+	assurance  afficher_garantie_1_arg;
+	void  *result_12;
 	char *afficher_liste_telephone_1_arg;
-	livraison  *result_12;
+	telephone  *result_13;
+	int  choisir_son_telephone_1_arg;
+	void  *result_14;
+	int  afficher_information_telephone_1_arg;
+	livraison  *result_15;
 	programmerLivraisonParam  programmer_livraison_1_arg;
-	void  *result_13;
+	void  *result_16;
 	livraison  annuler_livraison_1_arg;
 
 #ifndef	DEBUG
@@ -46,56 +52,68 @@ louetontel_prog_1(char *host)
 	}
 #endif	/* DEBUG */
 
-	result_1 = enregistrer_client_1(&enregistrer_client_1_arg, clnt);
-	if (result_1 == (client *) NULL) {
+	result_1 = allumer_application_1((void*)&allumer_application_1_arg, clnt);
+	if (result_1 == (void *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
-	result_2 = maj_information_client_1(&maj_information_client_1_arg, clnt);
+	result_2 = enregistrer_client_1(&enregistrer_client_1_arg, clnt);
 	if (result_2 == (client *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
-	result_3 = effectuer_location_1(&effectuer_location_1_arg, clnt);
-	if (result_3 == (location *) NULL) {
+	result_3 = maj_information_client_1(&maj_information_client_1_arg, clnt);
+	if (result_3 == (client *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
-	result_4 = annuler_location_1(&annuler_location_1_arg, clnt);
-	if (result_4 == (void *) NULL) {
+	result_4 = effectuer_location_1(&effectuer_location_1_arg, clnt);
+	if (result_4 == (location *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
-	result_5 = afficher_nb_location_1(&afficher_nb_location_1_arg, clnt);
+	result_5 = annuler_location_1(&annuler_location_1_arg, clnt);
 	if (result_5 == (void *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
-	result_6 = afficher_location_1(&afficher_location_1_arg, clnt);
+	result_6 = afficher_nb_location_1(&afficher_nb_location_1_arg, clnt);
 	if (result_6 == (void *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
-	result_7 = modifier_location_1(&modifier_location_1_arg, clnt);
-	if (result_7 == (location *) NULL) {
+	result_7 = afficher_location_1(&afficher_location_1_arg, clnt);
+	if (result_7 == (void *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
-	result_8 = effectuer_assurance_1(&effectuer_assurance_1_arg, clnt);
-	if (result_8 == (assurance *) NULL) {
+	result_8 = modifier_location_1(&modifier_location_1_arg, clnt);
+	if (result_8 == (location *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
-	result_9 = afficher_type_assurance_1((void*)&afficher_type_assurance_1_arg, clnt);
-	if (result_9 == (void *) NULL) {
+	result_9 = effectuer_assurance_1(&effectuer_assurance_1_arg, clnt);
+	if (result_9 == (assurance *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
-	result_10 = afficher_garantie_1(&afficher_garantie_1_arg, clnt);
+	result_10 = afficher_type_assurance_1((void*)&afficher_type_assurance_1_arg, clnt);
 	if (result_10 == (void *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
-	result_11 = afficher_liste_telephone_1((void*)&afficher_liste_telephone_1_arg, clnt);
+	result_11 = afficher_garantie_1(&afficher_garantie_1_arg, clnt);
 	if (result_11 == (void *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
-	result_12 = programmer_livraison_1(&programmer_livraison_1_arg, clnt);
-	if (result_12 == (livraison *) NULL) {
+	result_12 = afficher_liste_telephone_1((void*)&afficher_liste_telephone_1_arg, clnt);
+	if (result_12 == (void *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
-	result_13 = annuler_livraison_1(&annuler_livraison_1_arg, clnt);
-	if (result_13 == (void *) NULL) {
+	result_13 = choisir_son_telephone_1(&choisir_son_telephone_1_arg, clnt);
+	if (result_13 == (telephone *) NULL) {
+		clnt_perror (clnt, "call failed");
+	}
+	result_14 = afficher_information_telephone_1(&afficher_information_telephone_1_arg, clnt);
+	if (result_14 == (void *) NULL) {
+		clnt_perror (clnt, "call failed");
+	}
+	result_15 = programmer_livraison_1(&programmer_livraison_1_arg, clnt);
+	if (result_15 == (livraison *) NULL) {
+		clnt_perror (clnt, "call failed");
+	}
+	result_16 = annuler_livraison_1(&annuler_livraison_1_arg, clnt);
+	if (result_16 == (void *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
 #ifndef	DEBUG
