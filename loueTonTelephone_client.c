@@ -42,7 +42,9 @@ louetontel_prog_1(char *host)
 	livraison  *result_15;
 	programmerLivraisonParam  programmer_livraison_1_arg;
 	void  *result_16;
-	livraison  annuler_livraison_1_arg;
+	annulerLivraisonParam  annuler_livraison_1_arg;
+	livraison  *result_17;
+	modifierLivraisonParam  modifier_livraison_1_arg;
 
 #ifndef	DEBUG
 	clnt = clnt_create (host, LOUETONTEL_PROG, LOUETONTEL_VERSION_1, "udp");
@@ -114,6 +116,10 @@ louetontel_prog_1(char *host)
 	}
 	result_16 = annuler_livraison_1(&annuler_livraison_1_arg, clnt);
 	if (result_16 == (void *) NULL) {
+		clnt_perror (clnt, "call failed");
+	}
+	result_17 = modifier_livraison_1(&modifier_livraison_1_arg, clnt);
+	if (result_17 == (livraison *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
 #ifndef	DEBUG

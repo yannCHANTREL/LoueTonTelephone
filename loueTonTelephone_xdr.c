@@ -6,20 +6,6 @@
 #include "loueTonTelephone.h"
 
 bool_t
-xdr_livraison (XDR *xdrs, livraison *objp)
-{
-	register int32_t *buf;
-
-	 if (!xdr_pointer (xdrs, (char **)&objp->nom, sizeof (char), (xdrproc_t) xdr_char))
-		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->adresse, sizeof (char), (xdrproc_t) xdr_char))
-		 return FALSE;
-	 if (!xdr_telephone (xdrs, &objp->tel))
-		 return FALSE;
-	return TRUE;
-}
-
-bool_t
 xdr_information (XDR *xdrs, information *objp)
 {
 	register int32_t *buf;
@@ -107,6 +93,36 @@ xdr_telephone (XDR *xdrs, telephone *objp)
 }
 
 bool_t
+xdr_livraison (XDR *xdrs, livraison *objp)
+{
+	register int32_t *buf;
+
+	 if (!xdr_pointer (xdrs, (char **)&objp->nom, sizeof (char), (xdrproc_t) xdr_char))
+		 return FALSE;
+	 if (!xdr_pointer (xdrs, (char **)&objp->adresse, sizeof (char), (xdrproc_t) xdr_char))
+		 return FALSE;
+	 if (!xdr_telephone (xdrs, &objp->tel))
+		 return FALSE;
+	 if (!xdr_int (xdrs, &objp->enCours))
+		 return FALSE;
+	return TRUE;
+}
+
+bool_t
+xdr_assurance (XDR *xdrs, assurance *objp)
+{
+	register int32_t *buf;
+
+	 if (!xdr_int (xdrs, &objp->duree))
+		 return FALSE;
+	 if (!xdr_double (xdrs, &objp->prix))
+		 return FALSE;
+	 if (!xdr_int (xdrs, &objp->modePaiement))
+		 return FALSE;
+	return TRUE;
+}
+
+bool_t
 xdr_location (XDR *xdrs, location *objp)
 {
 	register int32_t *buf;
@@ -129,28 +145,20 @@ xdr_client (XDR *xdrs, client *objp)
 {
 	register int32_t *buf;
 
+	int i;
 	 if (!xdr_pointer (xdrs, (char **)&objp->nom, sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
 	 if (!xdr_pointer (xdrs, (char **)&objp->adresse, sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
-	 if (!xdr_array (xdrs, (char **)&objp->tabLocation.tabLocation_val, (u_int *) &objp->tabLocation.tabLocation_len, ~0,
+	 if (!xdr_vector (xdrs, (char *)objp->tabLocation, 10,
 		sizeof (location), (xdrproc_t) xdr_location))
 		 return FALSE;
 	 if (!xdr_int (xdrs, &objp->nbLocation))
 		 return FALSE;
-	return TRUE;
-}
-
-bool_t
-xdr_assurance (XDR *xdrs, assurance *objp)
-{
-	register int32_t *buf;
-
-	 if (!xdr_int (xdrs, &objp->duree))
+	 if (!xdr_vector (xdrs, (char *)objp->tabLivraison, 10,
+		sizeof (livraison), (xdrproc_t) xdr_livraison))
 		 return FALSE;
-	 if (!xdr_double (xdrs, &objp->prix))
-		 return FALSE;
-	 if (!xdr_int (xdrs, &objp->modePaiement))
+	 if (!xdr_int (xdrs, &objp->nbLivraison))
 		 return FALSE;
 	return TRUE;
 }
@@ -234,7 +242,37 @@ xdr_programmerLivraisonParam (XDR *xdrs, programmerLivraisonParam *objp)
 		 return FALSE;
 	 if (!xdr_pointer (xdrs, (char **)&objp->adresse, sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
+	 if (!xdr_int (xdrs, &objp->nbLivraison))
+		 return FALSE;
 	 if (!xdr_telephone (xdrs, &objp->tel))
+		 return FALSE;
+	return TRUE;
+}
+
+bool_t
+xdr_annulerLivraisonParam (XDR *xdrs, annulerLivraisonParam *objp)
+{
+	register int32_t *buf;
+
+	 if (!xdr_int (xdrs, &objp->numLivraison))
+		 return FALSE;
+	 if (!xdr_pointer (xdrs, (char **)&objp->nom, sizeof (char), (xdrproc_t) xdr_char))
+		 return FALSE;
+	return TRUE;
+}
+
+bool_t
+xdr_modifierLivraisonParam (XDR *xdrs, modifierLivraisonParam *objp)
+{
+	register int32_t *buf;
+
+	 if (!xdr_pointer (xdrs, (char **)&objp->nom, sizeof (char), (xdrproc_t) xdr_char))
+		 return FALSE;
+	 if (!xdr_pointer (xdrs, (char **)&objp->adresse, sizeof (char), (xdrproc_t) xdr_char))
+		 return FALSE;
+	 if (!xdr_telephone (xdrs, &objp->tel))
+		 return FALSE;
+	 if (!xdr_int (xdrs, &objp->numLivraison))
 		 return FALSE;
 	return TRUE;
 }

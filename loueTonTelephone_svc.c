@@ -32,7 +32,8 @@ louetontel_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		int choisir_son_telephone_1_arg;
 		int afficher_information_telephone_1_arg;
 		programmerLivraisonParam programmer_livraison_1_arg;
-		livraison annuler_livraison_1_arg;
+		annulerLivraisonParam annuler_livraison_1_arg;
+		modifierLivraisonParam modifier_livraison_1_arg;
 	} argument;
 	char *result;
 	xdrproc_t _xdr_argument, _xdr_result;
@@ -134,9 +135,15 @@ louetontel_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		break;
 
 	case annuler_livraison:
-		_xdr_argument = (xdrproc_t) xdr_livraison;
+		_xdr_argument = (xdrproc_t) xdr_annulerLivraisonParam;
 		_xdr_result = (xdrproc_t) xdr_void;
 		local = (char *(*)(char *, struct svc_req *)) annuler_livraison_1_svc;
+		break;
+
+	case modifier_livraison:
+		_xdr_argument = (xdrproc_t) xdr_modifierLivraisonParam;
+		_xdr_result = (xdrproc_t) xdr_livraison;
+		local = (char *(*)(char *, struct svc_req *)) modifier_livraison_1_svc;
 		break;
 
 	default:

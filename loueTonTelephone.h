@@ -14,13 +14,6 @@ extern "C" {
 #endif
 
 
-struct livraison {
-	char *nom;
-	char *adresse;
-	telephone tel;
-};
-typedef struct livraison livraison;
-
 struct information {
 	char *processeur;
 	int ram;
@@ -39,6 +32,21 @@ struct telephone {
 };
 typedef struct telephone telephone;
 
+struct livraison {
+	char *nom;
+	char *adresse;
+	telephone tel;
+	int enCours;
+};
+typedef struct livraison livraison;
+
+struct assurance {
+	int duree;
+	double prix;
+	int modePaiement;
+};
+typedef struct assurance assurance;
+
 struct location {
 	int num;
 	telephone tel;
@@ -51,20 +59,12 @@ typedef struct location location;
 struct client {
 	char *nom;
 	char *adresse;
-	struct {
-		u_int tabLocation_len;
-		location *tabLocation_val;
-	} tabLocation;
+	location tabLocation[10];
 	int nbLocation;
+	livraison tabLivraison[10];
+	int nbLivraison;
 };
 typedef struct client client;
-
-struct assurance {
-	int duree;
-	double prix;
-	int modePaiement;
-};
-typedef struct assurance assurance;
 
 struct enregistrerClientParam {
 	char *nom;
@@ -104,9 +104,24 @@ typedef struct modifierLocationParam modifierLocationParam;
 struct programmerLivraisonParam {
 	char *nom;
 	char *adresse;
+	int nbLivraison;
 	telephone tel;
 };
 typedef struct programmerLivraisonParam programmerLivraisonParam;
+
+struct annulerLivraisonParam {
+	int numLivraison;
+	char *nom;
+};
+typedef struct annulerLivraisonParam annulerLivraisonParam;
+
+struct modifierLivraisonParam {
+	char *nom;
+	char *adresse;
+	telephone tel;
+	int numLivraison;
+};
+typedef struct modifierLivraisonParam modifierLivraisonParam;
 
 #define LOUETONTEL_PROG 0x20000001
 #define LOUETONTEL_VERSION_1 1
@@ -158,8 +173,11 @@ extern  void * afficher_information_telephone_1_svc(int *, struct svc_req *);
 extern  livraison * programmer_livraison_1(programmerLivraisonParam *, CLIENT *);
 extern  livraison * programmer_livraison_1_svc(programmerLivraisonParam *, struct svc_req *);
 #define annuler_livraison 16
-extern  void * annuler_livraison_1(livraison *, CLIENT *);
-extern  void * annuler_livraison_1_svc(livraison *, struct svc_req *);
+extern  void * annuler_livraison_1(annulerLivraisonParam *, CLIENT *);
+extern  void * annuler_livraison_1_svc(annulerLivraisonParam *, struct svc_req *);
+#define modifier_livraison 17
+extern  livraison * modifier_livraison_1(modifierLivraisonParam *, CLIENT *);
+extern  livraison * modifier_livraison_1_svc(modifierLivraisonParam *, struct svc_req *);
 extern int louetontel_prog_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
 
 #else /* K&R C */
@@ -211,38 +229,45 @@ extern  livraison * programmer_livraison_1_svc();
 #define annuler_livraison 16
 extern  void * annuler_livraison_1();
 extern  void * annuler_livraison_1_svc();
+#define modifier_livraison 17
+extern  livraison * modifier_livraison_1();
+extern  livraison * modifier_livraison_1_svc();
 extern int louetontel_prog_1_freeresult ();
 #endif /* K&R C */
 
 /* the xdr functions */
 
 #if defined(__STDC__) || defined(__cplusplus)
-extern  bool_t xdr_livraison (XDR *, livraison*);
 extern  bool_t xdr_information (XDR *, information*);
 extern  bool_t xdr_telephone (XDR *, telephone*);
+extern  bool_t xdr_livraison (XDR *, livraison*);
+extern  bool_t xdr_assurance (XDR *, assurance*);
 extern  bool_t xdr_location (XDR *, location*);
 extern  bool_t xdr_client (XDR *, client*);
-extern  bool_t xdr_assurance (XDR *, assurance*);
 extern  bool_t xdr_enregistrerClientParam (XDR *, enregistrerClientParam*);
 extern  bool_t xdr_majInformationClientParam (XDR *, majInformationClientParam*);
 extern  bool_t xdr_effectuerLocationParam (XDR *, effectuerLocationParam*);
 extern  bool_t xdr_annulerLocationParam (XDR *, annulerLocationParam*);
 extern  bool_t xdr_modifierLocationParam (XDR *, modifierLocationParam*);
 extern  bool_t xdr_programmerLivraisonParam (XDR *, programmerLivraisonParam*);
+extern  bool_t xdr_annulerLivraisonParam (XDR *, annulerLivraisonParam*);
+extern  bool_t xdr_modifierLivraisonParam (XDR *, modifierLivraisonParam*);
 
 #else /* K&R C */
-extern bool_t xdr_livraison ();
 extern bool_t xdr_information ();
 extern bool_t xdr_telephone ();
+extern bool_t xdr_livraison ();
+extern bool_t xdr_assurance ();
 extern bool_t xdr_location ();
 extern bool_t xdr_client ();
-extern bool_t xdr_assurance ();
 extern bool_t xdr_enregistrerClientParam ();
 extern bool_t xdr_majInformationClientParam ();
 extern bool_t xdr_effectuerLocationParam ();
 extern bool_t xdr_annulerLocationParam ();
 extern bool_t xdr_modifierLocationParam ();
 extern bool_t xdr_programmerLivraisonParam ();
+extern bool_t xdr_annulerLivraisonParam ();
+extern bool_t xdr_modifierLivraisonParam ();
 
 #endif /* K&R C */
 

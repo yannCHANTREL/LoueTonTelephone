@@ -1,16 +1,18 @@
-struct livraison {char * nom; char * adresse; telephone tel;};
 struct information {char * processeur; int ram; double tailleEcran; int autonomie; int memoire; int qualiteCamera; char * systemeExploitation;};
 struct telephone {char * appareil; double prix; information mesInformations;};
-struct location {int num; telephone tel; char * date; int enCours; assurance uneAssurance;};
-struct client {char * nom; char * adresse; location tabLocation<>; int nbLocation;};
+struct livraison {char * nom; char * adresse; telephone tel; int enCours;};
 struct assurance {int duree; double prix; int modePaiement;};
+struct location {int num; telephone tel; char * date; int enCours; assurance uneAssurance;};
+struct client {char * nom; char * adresse; location tabLocation[10]; int nbLocation; livraison tabLivraison[10]; int nbLivraison;};
 
 struct enregistrerClientParam {char * nom; char * adresse;};
 struct majInformationClientParam {char * ancienNom; char * nom; char * adresse;};
 struct effectuerLocationParam {telephone tel; char * nom; int nbLocation; assurance uneAssurance;};
 struct annulerLocationParam {int numLocation; char * nom;};
 struct modifierLocationParam {telephone tel; char * nom; int num; assurance uneAssurance;};
-struct programmerLivraisonParam {char * nom; char * adresse; telephone tel;};
+struct programmerLivraisonParam {char * nom; char * adresse; int nbLivraison; telephone tel;};
+struct annulerLivraisonParam {int numLivraison; char * nom;};
+struct modifierLivraisonParam {char * nom; char * adresse; telephone tel; int numLivraison;};
 
 program LOUETONTEL_PROG {
 	version LOUETONTEL_VERSION_1 {
@@ -40,6 +42,7 @@ program LOUETONTEL_PROG {
 		
 		/* Gestion des livraisons */
 		livraison programmer_livraison(programmerLivraisonParam) = 15;
-		void annuler_livraison(livraison) = 16;
+		void annuler_livraison(annulerLivraisonParam) = 16;
+		livraison modifier_livraison(modifierLivraisonParam) = 17;
 	} = 1;
 } = 0x20000001;

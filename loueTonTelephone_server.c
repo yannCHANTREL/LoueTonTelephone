@@ -8,7 +8,9 @@
 #include <time.h> 
 #include "loueTonTelephone.h"
 
-client listeClient<>;
+#define NBCLIENTMAX 200
+
+client listeClient[NBCLIENTMAX];
 int nbClient;
 telephone listeTelephone[3];
 
@@ -66,7 +68,7 @@ client * enregistrer_client_1_svc(enregistrerClientParam *argp, struct svc_req *
 		if (strcmp(clientActuel.nom, monClient.nom) == 0) {
 			// On retourne le client demandé
 			printf("enregistrer_client - Le client nommé %s a été trouvé et retourné\n",monClient.nom);
-			return listeClient[i];
+			return &listeClient[i];
 		}
 	}
 	// Création du nouveau client	
@@ -74,6 +76,7 @@ client * enregistrer_client_1_svc(enregistrerClientParam *argp, struct svc_req *
 	result.nom = monClient.nom;
 	result.adresse = monClient.adresse;
 	result.nbLocation = 0;
+	result.nbLivraison = 0;
 	// Ajout du client sur le serveur
 	listeClient[nbClient] = result;
 	nbClient++;
@@ -85,7 +88,7 @@ client * enregistrer_client_1_svc(enregistrerClientParam *argp, struct svc_req *
 client * maj_information_client_1_svc(majInformationClientParam *argp, struct svc_req *rqstp) {
 	static client result;
 	majInformationClientParam data = *argp;
-	ancienNom = data.ancienNom;
+	char * ancienNom = data.ancienNom;
 	// Recherche du client
 	for (int i = 0; i < nbClient; i++) {
 		client clientActuel = listeClient[i];
@@ -142,11 +145,12 @@ void * annuler_location_1_svc(annulerLocationParam *argp, struct svc_req *rqstp)
 				clientActuel.tabLocation[j] = clientActuel.tabLocation[j+1];
 				j++;
 			}
-			clientActuel.tabLocation[j] = NULL;
+			location loc;
+			clientActuel.tabLocation[j] = loc;
 			clientActuel.nbLocation--;
 		}
 	}
-	printf("annuler_location - Le client nommé %s a annulé la location numéro %d, correspondant au client nommé %s\n",data.nom,data.numLocation,data.nom);
+	printf("annuler_location - Le client nommé %s a annulé la location numéro %d\n",data.nom,data.numLocation);
 }
 
 void * afficher_nb_location_1_svc(client *argp, struct svc_req *rqstp) {
@@ -191,19 +195,19 @@ void * afficher_location_1_svc(client *argp, struct svc_req *rqstp) {
 					telephone tel = locationActuel.tel;
 					assurance monAssurance = locationActuel.uneAssurance;
 					// Location en cours ?
-					char enCours = "Non";
+					char * enCours = "Non";
 					if (locationActuel.enCours == 1) {
 						enCours = "Oui";
 					}
 					// Location avec assurance ?
-					char typeAssurance = "sans assurance";
+					char * typeAssurance = "sans assurance";
 					if (monAssurance.modePaiement == 1) {
 						typeAssurance = "avec assurance (paiement en mensualité)";
 					} else if (monAssurance.modePaiement == 2) {
 						typeAssurance = "avec assurance (paiement unique)"; 
 					}
 					// Affichage des informations sur la location
-					printf("Location numéro : %d - Téléphone : %s - Date de début : %s - En cours : %s - Type d'assurance : %s\n",locationActuel.num,tel.appareil,ctime(&t),enCours,typeAssurance);
+					printf("Location numéro : %d - Téléphone : %s - Date de début : %s - En cours : %s - Type d'assurance : %s\n",locationActuel.num,tel.appareil,locationActuel.date,enCours,typeAssurance);
 				}
 			}
 		}
@@ -268,24 +272,30 @@ void * afficher_liste_telephone_1_svc(void *argp, struct svc_req *rqstp) {
 	printf("afficher_liste_telephone - Les téléphones disponibles sont les suivants :\n");
 	for (int i = 0; i < 3; i++) {
 		telephone telActuel = listeTelephone[i];
-		printf("mobile numéro %d - Nom : %s - Prix de l'appreil : %ld\n",i,telActuel.appareil,telActuel.prix);
+		printf("mobile numéro %d - Nom : %s - Prix de l'appreil : %f\n",i,telActuel.appareil,telActuel.prix);
 	}
 }
 
 telephone * choisir_son_telephone_1_svc(int *argp, struct svc_req *rqstp) {
-	static telephone result = listeTelephone[*argp];
+	int num = *argp;
+	static telephone result;
+	telephone t = listeTelephone[num];
+	result.appareil = t.appareil;
+	result.prix = t.prix;
+	result.mesInformations = t.mesInformations;
+	printf("choisir_son_telephone - Vous avez choisi le téléphone numéro %d, nommé %s\n",*argp,result.appareil);
 	return &result;
 }
 
 void * afficher_information_telephone_1_svc(int *argp, struct svc_req *rqstp) {
 	// On récupère le téléphone
 	telephone tel = listeTelephone[*argp];
-	informations info = tel.mesInformations;
+	information info = tel.mesInformations;
 	printf("afficher_information_telephone - Téléphone numéro %d : Informations générale :\n",*argp);
 	// on communique chaque informations du téléphone
 	printf("Processeur : %s\n",info.processeur);
 	printf("RAM : %d Go\n",info.ram);
-	printf("Taille de l'écran : %ld pouces\n",info.tailleEcran);
+	printf("Taille de l'écran : %f pouces\n",info.tailleEcran);
 	printf("Autonomie estimé : %d heures\n",info.autonomie);
 	printf("Mémoire interne : %d Go\n",info.memoire);
 	printf("Résolution de la caméra : %d mégapixels\n",info.qualiteCamera);
@@ -293,17 +303,69 @@ void * afficher_information_telephone_1_svc(int *argp, struct svc_req *rqstp) {
 }
 
 livraison * programmer_livraison_1_svc(programmerLivraisonParam *argp, struct svc_req *rqstp) {
-	static livraison  result;
-
+	programmerLivraisonParam data = *argp;
+	static livraison result;
+	// Recherche du client
+	for (int i = 0; i < nbClient; i++) {
+		client clientActuel = listeClient[i];
+		// Existe t-il ?
+		if (strcmp(clientActuel.nom, data.nom) == 0) {
+			// Création de la livraison
+			result.nom = data.nom;
+			result.adresse = data.adresse;
+			result.tel = data.tel;
+			result.enCours = 1;
+			// On met a jour ses informations
+			clientActuel.tabLivraison[data.nbLivraison+1] = result;
+			clientActuel.nbLivraison = data.nbLivraison+1;
+		}
+	}
 	
-
+	telephone tel = data.tel;
+	printf("programmer_livraison - La livraison à bien été crée. Le client nommé %s recevera sont téléphone %s sous 24h, à l'adresse %s\n Merci d'avoir commandé sur LoueTonTelephone !\n",data.nom,tel.appareil,data.adresse);
 	return &result;
 }
 
-void * annuler_livraison_1_svc(livraison *argp, struct svc_req *rqstp) {
-	static char * result;
-
-	
-
-	return (void *) &result;
+void * annuler_livraison_1_svc(annulerLivraisonParam *argp, struct svc_req *rqstp) {
+	annulerLivraisonParam data = *argp;
+	// Recherche du client
+	for (int i = 0; i < nbClient; i++) {
+		client clientActuel = listeClient[i];
+		// Existe t-il ?
+		if (strcmp(clientActuel.nom, data.nom) == 0) {
+			// On met a jour ses informations
+			int j = data.numLivraison;
+			while (j < clientActuel.nbLivraison) {
+				clientActuel.tabLivraison[j] = clientActuel.tabLivraison[j+1];
+				j++;
+			}
+			livraison liv;
+			clientActuel.tabLivraison[j] = liv;
+			clientActuel.nbLivraison--;
+		}
+	}
+	printf("annuler_livraison - Le client nommé %s a annulé la livraison numéro %d\n",data.nom,data.numLivraison);	
 }
+
+livraison * modifier_livraison_1_svc(modifierLivraisonParam *argp, struct svc_req *rqstp) {
+	static livraison result;
+	modifierLivraisonParam data = *argp;
+	// Recherche du client
+	for (int i = 0; i < nbClient; i++) {
+		client clientActuel = listeClient[i];
+		// Existe t-il ?
+		if (strcmp(clientActuel.nom, data.nom) == 0) {
+			// On crée une nouvelle livraison
+			result.nom = data.nom;
+			result.adresse = data.adresse;
+			result.tel = data.tel;
+			result.enCours = 1;
+			// On met a jour la location cible
+			clientActuel.tabLivraison[data.numLivraison] = result;
+		}
+	}
+	telephone tel = data.tel;
+	printf("modifier_livraison - Le client nommé %s a modifié la livraison numéro %d, lui attribuant le téléphone nommé %s. Le téléphone sera livré, sous un délais de 24h maximum, à l'adresse %s.\n",data.nom,data.numLivraison,tel.appareil,data.adresse);
+	return &result;
+}
+
