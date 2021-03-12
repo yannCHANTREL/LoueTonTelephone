@@ -18,45 +18,46 @@ void * allumer_application_1_svc(void *argp, struct svc_req *rqstp) {
 	nbClient = 0;
 	
 	information info1;
-	info1.processeur = "Helio P60";
+	strcpy(info1.processeur,"Helio P60");
 	info1.ram = 3;
 	info1.tailleEcran = 6.0;
 	info1.autonomie = 12;
 	info1.memoire = 128;
 	info1.qualiteCamera = 8;
-	info1.systemeExploitation = "Android Nougat";
+	strcpy(info1.systemeExploitation,"Android Nougat");
 	information info2;
-	info2.processeur = "Kirin 970";
+	strcpy(info2.processeur,"Kirin 970");
 	info2.ram = 4;
 	info2.tailleEcran = 6.0;
 	info2.autonomie = 12;
 	info2.memoire = 128;
 	info2.qualiteCamera = 10;
-	info2.systemeExploitation = "Android Oréo";
+	strcpy(info2.systemeExploitation,"Android Oréo");
 	information info3;
-	info3.processeur = "Snapdragon 845";
+	strcpy(info3.processeur,"Snapdragon 845");
 	info3.ram = 6;
 	info3.tailleEcran = 6.4;
 	info3.autonomie = 12;
 	info3.memoire = 256;
 	info3.qualiteCamera = 10;
-	info3.systemeExploitation = "Android Oréo";
+	strcpy(info3.systemeExploitation,"Android Oréo");
 	
 	telephone tel1;
-	tel1.appareil = "Galaxy S20 FE";
+	strcpy(tel1.appareil,"Galaxy S20 FE");
 	tel1.prix = 659.0;
 	tel1.mesInformations = info1;
 	telephone tel2;
-	tel2.appareil = "Galaxy S20";
+	strcpy(tel2.appareil,"Galaxy S20");
 	tel2.prix = 909.0;
 	tel2.mesInformations = info2;
 	telephone tel3;
-	tel3.appareil = "Galaxy S20+";
+	strcpy(tel3.appareil,"Galaxy S20+");
 	tel3.prix = 1009.0;
 	tel3.mesInformations = info3;
 	listeTelephone[0] = tel1;
 	listeTelephone[1] = tel2;
 	listeTelephone[2] = tel3;
+	printf("allumer_application - L'application est prête à être utilisé\n");
 }
 
 client * enregistrer_client_1_svc(enregistrerClientParam *argp, struct svc_req *rqstp) {
@@ -73,8 +74,8 @@ client * enregistrer_client_1_svc(enregistrerClientParam *argp, struct svc_req *
 	}
 	// Création du nouveau client	
 	static client result;
-	result.nom = monClient.nom;
-	result.adresse = monClient.adresse;
+	strcpy(result.nom,monClient.nom);
+	strcpy(result.adresse,monClient.adresse);
 	result.nbLocation = 0;
 	result.nbLivraison = 0;
 	// Ajout du client sur le serveur
@@ -95,8 +96,8 @@ client * maj_information_client_1_svc(majInformationClientParam *argp, struct sv
 		// Existe t-il ?
 		if (strcmp(clientActuel.nom, ancienNom) == 0) {
 			// On met a jour ses informations
-			clientActuel.nom = data.nom;
-			clientActuel.adresse = data.adresse;
+			strcpy(clientActuel.nom,data.nom);
+			strcpy(clientActuel.adresse,data.nom);
 			// On retourne le client modifié
 			result = clientActuel;
 		}
@@ -112,7 +113,8 @@ location * effectuer_location_1_svc(effectuerLocationParam *argp, struct svc_req
 	result.num = data.nbLocation + 1;
 	result.tel = data.tel;
 	time_t t = time(NULL); // Recupère la date du jour
-	result.date = ctime(&t); // Transforme la date en une chaine de caractères
+	// Transforme la date en une chaine de caractères
+	strcpy(result.date,ctime(&t));
 	result.enCours = 1;
 	result.uneAssurance = data.uneAssurance;
 	// On met à jour la table de location du client
@@ -226,7 +228,8 @@ location * modifier_location_1_svc(modifierLocationParam *argp, struct svc_req *
 			result.num = data.num;
 			result.tel = data.tel;
 			time_t t = time(NULL); // Recupère la date du jour
-			result.date = ctime(&t); // On l'attribut (en tant que char)
+			// On l'attribut (en tant que char)
+			strcpy(result.date,ctime(&t));
 			result.enCours = 1;
 			result.uneAssurance = data.uneAssurance;
 			// On met a jour la location cible
@@ -280,7 +283,7 @@ telephone * choisir_son_telephone_1_svc(int *argp, struct svc_req *rqstp) {
 	int num = *argp;
 	static telephone result;
 	telephone t = listeTelephone[num];
-	result.appareil = t.appareil;
+	strcpy(result.appareil,t.appareil);
 	result.prix = t.prix;
 	result.mesInformations = t.mesInformations;
 	printf("choisir_son_telephone - Vous avez choisi le téléphone numéro %d, nommé %s\n",*argp,result.appareil);
@@ -311,8 +314,8 @@ livraison * programmer_livraison_1_svc(programmerLivraisonParam *argp, struct sv
 		// Existe t-il ?
 		if (strcmp(clientActuel.nom, data.nom) == 0) {
 			// Création de la livraison
-			result.nom = data.nom;
-			result.adresse = data.adresse;
+			strcpy(result.nom,data.nom);
+			strcpy(result.adresse,data.adresse);
 			result.tel = data.tel;
 			result.enCours = 1;
 			// On met a jour ses informations
@@ -356,8 +359,8 @@ livraison * modifier_livraison_1_svc(modifierLivraisonParam *argp, struct svc_re
 		// Existe t-il ?
 		if (strcmp(clientActuel.nom, data.nom) == 0) {
 			// On crée une nouvelle livraison
-			result.nom = data.nom;
-			result.adresse = data.adresse;
+			strcpy(result.nom,data.nom);
+			strcpy(result.adresse,data.adresse);
 			result.tel = data.tel;
 			result.enCours = 1;
 			// On met a jour la location cible

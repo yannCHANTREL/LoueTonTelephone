@@ -10,9 +10,11 @@ xdr_information (XDR *xdrs, information *objp)
 {
 	register int32_t *buf;
 
+	int i;
 
 	if (xdrs->x_op == XDR_ENCODE) {
-		 if (!xdr_pointer (xdrs, (char **)&objp->processeur, sizeof (char), (xdrproc_t) xdr_char))
+		 if (!xdr_vector (xdrs, (char *)objp->processeur, 256,
+			sizeof (char), (xdrproc_t) xdr_char))
 			 return FALSE;
 		 if (!xdr_int (xdrs, &objp->ram))
 			 return FALSE;
@@ -32,11 +34,13 @@ xdr_information (XDR *xdrs, information *objp)
 		IXDR_PUT_LONG(buf, objp->memoire);
 		IXDR_PUT_LONG(buf, objp->qualiteCamera);
 		}
-		 if (!xdr_pointer (xdrs, (char **)&objp->systemeExploitation, sizeof (char), (xdrproc_t) xdr_char))
+		 if (!xdr_vector (xdrs, (char *)objp->systemeExploitation, 256,
+			sizeof (char), (xdrproc_t) xdr_char))
 			 return FALSE;
 		return TRUE;
 	} else if (xdrs->x_op == XDR_DECODE) {
-		 if (!xdr_pointer (xdrs, (char **)&objp->processeur, sizeof (char), (xdrproc_t) xdr_char))
+		 if (!xdr_vector (xdrs, (char *)objp->processeur, 256,
+			sizeof (char), (xdrproc_t) xdr_char))
 			 return FALSE;
 		 if (!xdr_int (xdrs, &objp->ram))
 			 return FALSE;
@@ -56,12 +60,14 @@ xdr_information (XDR *xdrs, information *objp)
 		objp->memoire = IXDR_GET_LONG(buf);
 		objp->qualiteCamera = IXDR_GET_LONG(buf);
 		}
-		 if (!xdr_pointer (xdrs, (char **)&objp->systemeExploitation, sizeof (char), (xdrproc_t) xdr_char))
+		 if (!xdr_vector (xdrs, (char *)objp->systemeExploitation, 256,
+			sizeof (char), (xdrproc_t) xdr_char))
 			 return FALSE;
 	 return TRUE;
 	}
 
-	 if (!xdr_pointer (xdrs, (char **)&objp->processeur, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_vector (xdrs, (char *)objp->processeur, 256,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
 	 if (!xdr_int (xdrs, &objp->ram))
 		 return FALSE;
@@ -73,7 +79,8 @@ xdr_information (XDR *xdrs, information *objp)
 		 return FALSE;
 	 if (!xdr_int (xdrs, &objp->qualiteCamera))
 		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->systemeExploitation, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_vector (xdrs, (char *)objp->systemeExploitation, 256,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
 	return TRUE;
 }
@@ -83,7 +90,9 @@ xdr_telephone (XDR *xdrs, telephone *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_pointer (xdrs, (char **)&objp->appareil, sizeof (char), (xdrproc_t) xdr_char))
+	int i;
+	 if (!xdr_vector (xdrs, (char *)objp->appareil, 256,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
 	 if (!xdr_double (xdrs, &objp->prix))
 		 return FALSE;
@@ -97,9 +106,12 @@ xdr_livraison (XDR *xdrs, livraison *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_pointer (xdrs, (char **)&objp->nom, sizeof (char), (xdrproc_t) xdr_char))
+	int i;
+	 if (!xdr_vector (xdrs, (char *)objp->nom, 256,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->adresse, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_vector (xdrs, (char *)objp->adresse, 256,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
 	 if (!xdr_telephone (xdrs, &objp->tel))
 		 return FALSE;
@@ -127,11 +139,13 @@ xdr_location (XDR *xdrs, location *objp)
 {
 	register int32_t *buf;
 
+	int i;
 	 if (!xdr_int (xdrs, &objp->num))
 		 return FALSE;
 	 if (!xdr_telephone (xdrs, &objp->tel))
 		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->date, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_vector (xdrs, (char *)objp->date, 256,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
 	 if (!xdr_int (xdrs, &objp->enCours))
 		 return FALSE;
@@ -146,9 +160,11 @@ xdr_client (XDR *xdrs, client *objp)
 	register int32_t *buf;
 
 	int i;
-	 if (!xdr_pointer (xdrs, (char **)&objp->nom, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_vector (xdrs, (char *)objp->nom, 256,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->adresse, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_vector (xdrs, (char *)objp->adresse, 256,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
 	 if (!xdr_vector (xdrs, (char *)objp->tabLocation, 10,
 		sizeof (location), (xdrproc_t) xdr_location))
@@ -168,9 +184,12 @@ xdr_enregistrerClientParam (XDR *xdrs, enregistrerClientParam *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_pointer (xdrs, (char **)&objp->nom, sizeof (char), (xdrproc_t) xdr_char))
+	int i;
+	 if (!xdr_vector (xdrs, (char *)objp->nom, 256,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->adresse, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_vector (xdrs, (char *)objp->adresse, 256,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
 	return TRUE;
 }
@@ -180,11 +199,15 @@ xdr_majInformationClientParam (XDR *xdrs, majInformationClientParam *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_pointer (xdrs, (char **)&objp->ancienNom, sizeof (char), (xdrproc_t) xdr_char))
+	int i;
+	 if (!xdr_vector (xdrs, (char *)objp->ancienNom, 256,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->nom, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_vector (xdrs, (char *)objp->nom, 256,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->adresse, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_vector (xdrs, (char *)objp->adresse, 256,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
 	return TRUE;
 }
@@ -194,9 +217,11 @@ xdr_effectuerLocationParam (XDR *xdrs, effectuerLocationParam *objp)
 {
 	register int32_t *buf;
 
+	int i;
 	 if (!xdr_telephone (xdrs, &objp->tel))
 		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->nom, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_vector (xdrs, (char *)objp->nom, 256,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
 	 if (!xdr_int (xdrs, &objp->nbLocation))
 		 return FALSE;
@@ -210,9 +235,11 @@ xdr_annulerLocationParam (XDR *xdrs, annulerLocationParam *objp)
 {
 	register int32_t *buf;
 
+	int i;
 	 if (!xdr_int (xdrs, &objp->numLocation))
 		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->nom, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_vector (xdrs, (char *)objp->nom, 256,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
 	return TRUE;
 }
@@ -222,9 +249,11 @@ xdr_modifierLocationParam (XDR *xdrs, modifierLocationParam *objp)
 {
 	register int32_t *buf;
 
+	int i;
 	 if (!xdr_telephone (xdrs, &objp->tel))
 		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->nom, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_vector (xdrs, (char *)objp->nom, 256,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
 	 if (!xdr_int (xdrs, &objp->num))
 		 return FALSE;
@@ -238,9 +267,12 @@ xdr_programmerLivraisonParam (XDR *xdrs, programmerLivraisonParam *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_pointer (xdrs, (char **)&objp->nom, sizeof (char), (xdrproc_t) xdr_char))
+	int i;
+	 if (!xdr_vector (xdrs, (char *)objp->nom, 256,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->adresse, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_vector (xdrs, (char *)objp->adresse, 256,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
 	 if (!xdr_int (xdrs, &objp->nbLivraison))
 		 return FALSE;
@@ -254,9 +286,11 @@ xdr_annulerLivraisonParam (XDR *xdrs, annulerLivraisonParam *objp)
 {
 	register int32_t *buf;
 
+	int i;
 	 if (!xdr_int (xdrs, &objp->numLivraison))
 		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->nom, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_vector (xdrs, (char *)objp->nom, 256,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
 	return TRUE;
 }
@@ -266,9 +300,12 @@ xdr_modifierLivraisonParam (XDR *xdrs, modifierLivraisonParam *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_pointer (xdrs, (char **)&objp->nom, sizeof (char), (xdrproc_t) xdr_char))
+	int i;
+	 if (!xdr_vector (xdrs, (char *)objp->nom, 256,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->adresse, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_vector (xdrs, (char *)objp->adresse, 256,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
 	 if (!xdr_telephone (xdrs, &objp->tel))
 		 return FALSE;

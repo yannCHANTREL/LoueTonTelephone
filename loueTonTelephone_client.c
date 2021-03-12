@@ -7,44 +7,8 @@
 #include "loueTonTelephone.h"
 
 
-void
-louetontel_prog_1(char *host)
-{
+void louetontel_prog_1(char *host) {
 	CLIENT *clnt;
-	void  *result_1;
-	char *allumer_application_1_arg;
-	client  *result_2;
-	enregistrerClientParam  enregistrer_client_1_arg;
-	client  *result_3;
-	majInformationClientParam  maj_information_client_1_arg;
-	location  *result_4;
-	effectuerLocationParam  effectuer_location_1_arg;
-	void  *result_5;
-	annulerLocationParam  annuler_location_1_arg;
-	void  *result_6;
-	client  afficher_nb_location_1_arg;
-	void  *result_7;
-	client  afficher_location_1_arg;
-	location  *result_8;
-	modifierLocationParam  modifier_location_1_arg;
-	assurance  *result_9;
-	int  effectuer_assurance_1_arg;
-	void  *result_10;
-	char *afficher_type_assurance_1_arg;
-	void  *result_11;
-	assurance  afficher_garantie_1_arg;
-	void  *result_12;
-	char *afficher_liste_telephone_1_arg;
-	telephone  *result_13;
-	int  choisir_son_telephone_1_arg;
-	void  *result_14;
-	int  afficher_information_telephone_1_arg;
-	livraison  *result_15;
-	programmerLivraisonParam  programmer_livraison_1_arg;
-	void  *result_16;
-	annulerLivraisonParam  annuler_livraison_1_arg;
-	livraison  *result_17;
-	modifierLivraisonParam  modifier_livraison_1_arg;
 
 #ifndef	DEBUG
 	clnt = clnt_create (host, LOUETONTEL_PROG, LOUETONTEL_VERSION_1, "udp");
@@ -53,16 +17,31 @@ louetontel_prog_1(char *host)
 		exit (1);
 	}
 #endif	/* DEBUG */
-
-	result_1 = allumer_application_1((void*)&allumer_application_1_arg, clnt);
+	
+	/* Scénario 1 : Gérard (un nouveau client) */
+	
+	// Gérard allume sont application
+	void * allumer_application_1_arg;
+	void * result_1 = allumer_application_1((void*)&allumer_application_1_arg, clnt);
 	if (result_1 == (void *) NULL) {
-		clnt_perror (clnt, "call failed");
+		clnt_perror (clnt, "allumer_application_1 call failed\n");
+	} else {
+		printf("allumer_application_1 OK\n");
 	}
-	result_2 = enregistrer_client_1(&enregistrer_client_1_arg, clnt);
-	if (result_2 == (client *) NULL) {
-		clnt_perror (clnt, "call failed");
+	
+	// Gérard s'enregistre en tant que nouveau client
+	enregistrerClientParam enregistrer_client_1_arg;
+	strcpy(enregistrer_client_1_arg.nom,"gerard");
+	strcpy(enregistrer_client_1_arg.adresse,"5 bis rue george nikouni 29200 Brest");
+	client * result_2 = enregistrer_client_1(&enregistrer_client_1_arg, clnt);
+	if (result_2 != (client *) NULL) {
+		clnt_perror (clnt, "enregistrer_client_1 call failed\n");
+	} else {
+		printf("enregistrer_client_1 OK\n");
 	}
-	result_3 = maj_information_client_1(&maj_information_client_1_arg, clnt);
+	
+	// Gérard c'est trompé dans l'écriture de son adresse, il met à jour ses informations
+	/*result_3 = maj_information_client_1(&maj_information_client_1_arg, clnt);
 	if (result_3 == (client *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
@@ -121,16 +100,14 @@ louetontel_prog_1(char *host)
 	result_17 = modifier_livraison_1(&modifier_livraison_1_arg, clnt);
 	if (result_17 == (livraison *) NULL) {
 		clnt_perror (clnt, "call failed");
-	}
+	}*/
 #ifndef	DEBUG
 	clnt_destroy (clnt);
 #endif	 /* DEBUG */
 }
 
 
-int
-main (int argc, char *argv[])
-{
+int main (int argc, char *argv[]) {
 	char *host;
 
 	if (argc < 2) {
@@ -139,5 +116,6 @@ main (int argc, char *argv[])
 	}
 	host = argv[1];
 	louetontel_prog_1 (host);
-exit (0);
+	exit (0);
 }
+
