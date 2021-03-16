@@ -36,7 +36,7 @@ void louetontel_prog_1(char *host) {
 	// PARAM
 	enregistrerClientParam enregistrer_client_1_arg;
 	strcpy(enregistrer_client_1_arg.nom,"gerard");
-	strcpy(enregistrer_client_1_arg.adresse,"5 bis");
+	strcpy(enregistrer_client_1_arg.adresse,"5 bis rue george nikouni 29200 Brest");
 	// EXECUTION
 	client * result_2 = enregistrer_client_1(&enregistrer_client_1_arg, clnt);
 	/*printf("%p\n",result_2);
@@ -55,7 +55,7 @@ void louetontel_prog_1(char *host) {
 	majInformationClientParam maj_information_client_1_arg;
 	strcpy(maj_information_client_1_arg.ancienNom,"gerard");
 	strcpy(maj_information_client_1_arg.nom,"gerard");
-	strcpy(maj_information_client_1_arg.adresse,"10 bis");
+	strcpy(maj_information_client_1_arg.adresse,"10 bis rue george nikouni 29200 Brest");
 	// EXECUTION
 	client * result_3 = maj_information_client_1(&maj_information_client_1_arg, clnt);
 	printf("%s\n", result_3->nom);

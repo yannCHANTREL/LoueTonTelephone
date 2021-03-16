@@ -79,10 +79,6 @@ client * enregistrer_client_1_svc(enregistrerClientParam *argp, struct svc_req *
 	strcpy(result.adresse,argp->adresse);
 	result.nbLocation = 0;
 	result.nbLivraison = 0;
-	location loc;
-	result.tabLocation[0] = loc;
-	livraison livr;
-	result.tabLivraison[0] = livr;
 
 	// Ajout du client sur le serveur
 	listeClient[nbClient] = result;

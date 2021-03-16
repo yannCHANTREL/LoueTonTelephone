@@ -15,26 +15,26 @@ extern "C" {
 
 
 struct information {
-	char processeur[256];
+	char processeur[15];
 	int ram;
 	double tailleEcran;
 	int autonomie;
 	int memoire;
 	int qualiteCamera;
-	char systemeExploitation[256];
+	char systemeExploitation[15];
 };
 typedef struct information information;
 
 struct telephone {
-	char appareil[256];
+	char appareil[15];
 	double prix;
 	information mesInformations;
 };
 typedef struct telephone telephone;
 
 struct livraison {
-	char nom[256];
-	char adresse[256];
+	char nom[15];
+	char adresse[15];
 	telephone tel;
 	int enCours;
 };
@@ -50,38 +50,38 @@ typedef struct assurance assurance;
 struct location {
 	int num;
 	telephone tel;
-	char date[256];
+	char date[15];
 	int enCours;
 	assurance uneAssurance;
 };
 typedef struct location location;
 
 struct client {
-	char nom[256];
-	char adresse[256];
-	location tabLocation[10];
+	char nom[15];
+	char adresse[15];
+	location tabLocation[15];
 	int nbLocation;
-	livraison tabLivraison[10];
+	livraison tabLivraison[15];
 	int nbLivraison;
 };
 typedef struct client client;
 
 struct enregistrerClientParam {
-	char nom[256];
-	char adresse[256];
+	char nom[15];
+	char adresse[15];
 };
 typedef struct enregistrerClientParam enregistrerClientParam;
 
 struct majInformationClientParam {
-	char ancienNom[256];
-	char nom[256];
-	char adresse[256];
+	char ancienNom[15];
+	char nom[15];
+	char adresse[15];
 };
 typedef struct majInformationClientParam majInformationClientParam;
 
 struct effectuerLocationParam {
 	telephone tel;
-	char nom[256];
+	char nom[15];
 	int nbLocation;
 	assurance uneAssurance;
 };
@@ -89,21 +89,21 @@ typedef struct effectuerLocationParam effectuerLocationParam;
 
 struct annulerLocationParam {
 	int numLocation;
-	char nom[256];
+	char nom[15];
 };
 typedef struct annulerLocationParam annulerLocationParam;
 
 struct modifierLocationParam {
 	telephone tel;
-	char nom[256];
+	char nom[15];
 	int num;
 	assurance uneAssurance;
 };
 typedef struct modifierLocationParam modifierLocationParam;
 
 struct programmerLivraisonParam {
-	char nom[256];
-	char adresse[256];
+	char nom[15];
+	char adresse[15];
 	int nbLivraison;
 	telephone tel;
 };
@@ -111,13 +111,13 @@ typedef struct programmerLivraisonParam programmerLivraisonParam;
 
 struct annulerLivraisonParam {
 	int numLivraison;
-	char nom[256];
+	char nom[15];
 };
 typedef struct annulerLivraisonParam annulerLivraisonParam;
 
 struct modifierLivraisonParam {
-	char nom[256];
-	char adresse[256];
+	char nom[15];
+	char adresse[15];
 	telephone tel;
 	int numLivraison;
 };
