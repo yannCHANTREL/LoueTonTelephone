@@ -8,24 +8,37 @@
 #include <time.h> 
 #include "loueTonTelephone.h"
 
-#define NBCLIENTMAX 200
+#define NBMAX 5
 
-client listeClient[NBCLIENTMAX];
+client listeClient[NBMAX];
 int nbClient;
+location listeLocation[NBMAX];
+int nbLocation;
+livraison listeLivraison[NBMAX];
+int nbLivraison;
+assurance listeAssurance[NBMAX];
+int nbAssurance;
+information listeInformation[3];
 telephone listeTelephone[3];
 
 void * allumer_application_1_svc(void *argp, struct svc_req *rqstp) {
 	nbClient = 0;
+	nbLocation = 0;
+	nbLivraison = 0;
+	nbAssurance = 0;
 	
 	information info1;
+	info1.id = 1;
 	strcpy(info1.processeur,"Helio P60");
 	info1.ram = 3;
 	info1.tailleEcran = 6.0;
 	info1.autonomie = 12;
 	info1.memoire = 128;
 	info1.qualiteCamera = 8;
-	strcpy(info1.systemeExploitation,"Android N");
+	strcpy(info1.systemeExploitation,"Android Nougat");
+	
 	information info2;
+	info2.id = 2;
 	strcpy(info2.processeur,"Kirin 970");
 	info2.ram = 4;
 	info2.tailleEcran = 6.0;
@@ -33,7 +46,9 @@ void * allumer_application_1_svc(void *argp, struct svc_req *rqstp) {
 	info2.memoire = 128;
 	info2.qualiteCamera = 10;
 	strcpy(info2.systemeExploitation,"Android Oréo");
+	
 	information info3;
+	info3.id = 3;
 	strcpy(info3.processeur,"Snapdragon 845");
 	info3.ram = 6;
 	info3.tailleEcran = 6.4;
@@ -43,159 +58,130 @@ void * allumer_application_1_svc(void *argp, struct svc_req *rqstp) {
 	strcpy(info3.systemeExploitation,"Android Oréo");
 	
 	telephone tel1;
+	tel1.id = 1;
 	strcpy(tel1.appareil,"Galaxy S20 FE");
 	tel1.prix = 659.0;
-	tel1.mesInformations = info1;
+	tel1.idInfo = 1;
+	listeTelephone[0] = tel1;
+	
 	telephone tel2;
+	tel2.id = 2;
 	strcpy(tel2.appareil,"Galaxy S20");
 	tel2.prix = 909.0;
-	tel2.mesInformations = info2;
+	tel2.idInfo = 2;
+	listeTelephone[1] = tel2;
+	
 	telephone tel3;
+	tel3.id = 3;
 	strcpy(tel3.appareil,"Galaxy S20+");
 	tel3.prix = 1009.0;
-	tel3.mesInformations = info3;
-	listeTelephone[0] = tel1;
-	listeTelephone[1] = tel2;
+	tel3.idInfo = 3;
 	listeTelephone[2] = tel3;
+	
 	printf("allumer_application - L'application est prête à être utilisé\n");
 }
 
-client * enregistrer_client_1_svc(enregistrerClientParam *argp, struct svc_req *rqstp) {
+int * enregistrer_client_1_svc(enregistrerClientParam *argp, struct svc_req *rqstp) {
 	enregistrerClientParam monClient = *argp;
-	// Recherche du client
-	for (int i = 0; i < nbClient; i++) {
-		client clientActuel = listeClient[i];
-		// Existe t-il ?
-		if (strcmp(clientActuel.nom, monClient.nom) == 0) {
-			// On retourne le client demandé
-			printf("enregistrer_client - Le client nommé %s a été trouvé et retourné\n",monClient.nom);
-			return &listeClient[i];
-		}
-	}
-	// Création du nouveau client	
-	static client result;
-
-	strcpy(result.nom,argp->nom);
-	strcpy(result.adresse,argp->adresse);
-	result.nbLocation = 0;
-	result.nbLivraison = 0;
-	location loc;
-	result.tabLocation[0] = loc;
-	livraison livr;
-	result.tabLivraison[0] = livr;
-
-	// Ajout du client sur le serveur
-	listeClient[nbClient] = result;
-	nbClient++;
+	static int idClient = monClient.idClient;
 	
-	// On retourne le nouveau client
-	printf("enregistrer_client - Le client nommé %s a été crée\n",result.nom);
-	printf("%p\n", &result);
-	return &result;
+	if (idClient > nbClient) {
+		// Création du nouveau client	
+		client newClient;
+		newClient.id = idClient;
+		strcpy(newClient.nom,monClient.nom);
+		strcpy(newClient.adresse,monClient.adresse);
+		// Ajout du client sur le serveur
+		listeClient[nbClient] = newClient;
+		nbClient++;
+		// On retourne le nouveau client
+		printf("enregistrer_client - Le client numéro %d, nommé %s a été crée\n",idClient,newClient.nom);
+		return idClient;
+	} else {
+		client unClient = listeClient[idClient];
+		return unClient.id;
+	}
 }
 
 client * maj_information_client_1_svc(majInformationClientParam *argp, struct svc_req *rqstp) {
-	static client result;
 	majInformationClientParam data = *argp;
-	char * ancienNom = data.ancienNom;
-	// Recherche du client
-	for (int i = 0; i < nbClient; i++) {
-		client clientActuel = listeClient[i];
-		// Existe t-il ?
-		if (strcmp(clientActuel.nom, ancienNom) == 0) {
-			// On met a jour ses informations
-			strcpy(clientActuel.nom,data.nom);
-			strcpy(clientActuel.adresse,data.nom);
-			// On retourne le client modifié
-			result = clientActuel;
-		}
+	static int idClient = data.idClient;
+	
+	if (idClient > nbClient) {
+		return -1;
+	} else {
+		client unClient = listeClient[idClient];
+		// On met a jour ses informations
+		strcpy(unClient.nom,data.nom);
+		strcpy(unClient.adresse,data.adresse);
+		// On retourne le client modifié
+		printf("maj_information_client - Vous avez modifié le client numéro %d\n",idClient);
+		return idClient;
 	}
-	printf("maj_information_client - Vous avez modifié le client nommé %s\n",data.ancienNom);
-	return &result;
 }
 
 location * effectuer_location_1_svc(effectuerLocationParam *argp, struct svc_req *rqstp) {
 	effectuerLocationParam data = *argp;
+	static int idLocation = nbLocation + 1;
 	// Création de la nouvelle location
-	static location result;
-	result.num = data.nbLocation + 1;
-	result.tel = data.tel;
+	location newLocation;
+	newLocation.id = idLocation;
+	newLocation.idClient = data.idClient;
+	newLocation.idTel = data.idTel;
 	time_t t = time(NULL); // Recupère la date du jour
 	// Transforme la date en une chaine de caractères
-	strcpy(result.date,ctime(&t));
+	strcpy(newLocation.date,ctime(&t));
 	result.enCours = 1;
-	result.uneAssurance = data.uneAssurance;
-	// On met à jour la table de location du client
-	// Recherche du client
-	for (int i = 0; i < nbClient; i++) {
-		printf("aaa\n");
-		client clientActuel = listeClient[i];
-		// Existe t-il ?
-		if (strcmp(clientActuel.nom, data.nom) == 0) {
-			// On met a jour ses informations
-			clientActuel.tabLocation[result.num] = result;
-			clientActuel.nbLocation = result.num;
-		}
-	}
-	assurance uneAssurance = data.uneAssurance;
-	telephone tel = data.tel;
-	printf("effectuer_location - Le client nommé %s a crée une nouvelle location pour le téléphone nommé %s. Celle-ci prend effet immédiatement. Le téléphone est assuré pendant %d mois\n",data.nom,tel.appareil,uneAssurance.duree);
+	newLocation.idAssu = data.idAssu;
+	
+	client unClient = listeClient[data.idClient];
+	assurance uneAssurance = listeAssurance[data.idAssu];
+	telephone tel = listeTelephone[data.idTel];
+	printf("effectuer_location - Le client nommé %s a crée une nouvelle location pour le téléphone nommé %s. Celle-ci prend effet immédiatement. Le téléphone est assuré pendant %d mois\n",unClient.nom,tel.appareil,uneAssurance.duree);
 	return &result;
 }
 
 void * annuler_location_1_svc(annulerLocationParam *argp, struct svc_req *rqstp) {
 	annulerLocationParam data = *argp;
-	// Recherche du client
-	for (int i = 0; i < nbClient; i++) {
-		client clientActuel = listeClient[i];
-		// Existe t-il ?
-		if (strcmp(clientActuel.nom, data.nom) == 0) {
-			// On met a jour ses informations
-			int j = data.numLocation;
-			while (j < clientActuel.nbLocation) {
-				clientActuel.tabLocation[j] = clientActuel.tabLocation[j+1];
-				j++;
-			}
-			location loc;
-			clientActuel.tabLocation[j] = loc;
-			clientActuel.nbLocation--;
+	if (nbLocation >= data.idLoc) {
+		client unClient = data.idClient;
+		int i = data.idClient;
+		while (i < nbLocation) {
+			listeLocation[i] = listeLocation[i+1];
+			i++;
 		}
+		location loc;
+		listeLocation[i] = loc;
+		nbLocation--;
+		printf("annuler_location - Le client nommé %s a annulé la location numéro %d\n",unClient.nom,data.idLoc);
 	}
-	printf("annuler_location - Le client nommé %s a annulé la location numéro %d\n",data.nom,data.numLocation);
 }
 
 void * afficher_nb_location_1_svc(client *argp, struct svc_req *rqstp) {
-	client monClient = *argp;
+	client monClient = listeClient[*argp];
 	int nbLocationEnCours = 0;
-	// Recherche du client
-	for (int i = 0; i < nbClient; i++) {
-		client clientActuel = listeClient[i];
-		// Existe t-il ?
-		if (strcmp(clientActuel.nom, monClient.nom) == 0) {
-			for (int j = 0; j < monClient.nbLocation; j++) {
-				location locationActuel = monClient.tabLocation[j];
-				// La location est en cours ?
-				if (locationActuel.enCours == 1) {
-					// On incrémente le compteur
-					nbLocationEnCours++;
-				}
-			}
+	// Recherche du nombre de lacoation en cours pour ce client
+	for (int i = 0; i < nbLocation; i++) {
+		location locationActuel = listeLocation[i];
+		if (locationActuel.idClient == *argp && locationActuel.enCours == 1) {
+			nbLocationEnCours++;
 		}
 	}
-	// Affichage du nombre de location en cours
+	// Affichage du nombre de location en cours pour ce client
 	printf("afficher_nb_location - Le client nommé %s a %d location en cours\n",monClient.nom,nbLocationEnCours);
 }
 
 void * afficher_location_1_svc(client *argp, struct svc_req *rqstp) {
-	client monClient = *argp;
-	if (monClient.nbLocation == 0) {
-		printf("afficher_location - Le client nommé %s n'a aucun location\n",monClient.nom);
-	} else {
-		if (monClient.nbLocation == 1) {
-			printf("afficher_location - Le client nommé %s a la location suivante :\n",monClient.nom);
-		} else {
-			printf("afficher_location - Le client nommé %s a les locations suivantes :\n",monClient.nom);
+	client monClient = listeClient[*argp];
+	for (int i = 0; i < nbLocation; i++) {
+		location locationActuel = listeLocation[i];
+		if (locationActuel.idClient == *argp) {
+			telephone tel = listeTelephone[locationActuel.idTel];
+			assurance assu = listeAssurance[locationActuel.idAssu];
+			printf("afficher_location - Le client nommé %s a la location suviante :\nNuméro : %d - Téléphone : %s - Date de début : %s - En cours : %s - Type d'assurance : %s\n\n",locationActuel.id,tel.appareil,locationActuel.date,enCours,typeAssurance);
 		}
+	}
+	
 		// Recherche du client
 		for (int i = 0; i < nbClient; i++) {
 			client clientActuel = listeClient[i];

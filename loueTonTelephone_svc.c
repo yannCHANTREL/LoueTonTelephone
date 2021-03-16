@@ -24,11 +24,10 @@ louetontel_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		majInformationClientParam maj_information_client_1_arg;
 		effectuerLocationParam effectuer_location_1_arg;
 		annulerLocationParam annuler_location_1_arg;
-		client afficher_nb_location_1_arg;
-		client afficher_location_1_arg;
+		int afficher_nb_location_1_arg;
+		int afficher_location_1_arg;
 		modifierLocationParam modifier_location_1_arg;
 		int effectuer_assurance_1_arg;
-		assurance afficher_garantie_1_arg;
 		int choisir_son_telephone_1_arg;
 		int afficher_information_telephone_1_arg;
 		programmerLivraisonParam programmer_livraison_1_arg;
@@ -52,19 +51,19 @@ louetontel_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 
 	case enregistrer_client:
 		_xdr_argument = (xdrproc_t) xdr_enregistrerClientParam;
-		_xdr_result = (xdrproc_t) xdr_client;
+		_xdr_result = (xdrproc_t) xdr_int;
 		local = (char *(*)(char *, struct svc_req *)) enregistrer_client_1_svc;
 		break;
 
 	case maj_information_client:
 		_xdr_argument = (xdrproc_t) xdr_majInformationClientParam;
-		_xdr_result = (xdrproc_t) xdr_client;
+		_xdr_result = (xdrproc_t) xdr_void;
 		local = (char *(*)(char *, struct svc_req *)) maj_information_client_1_svc;
 		break;
 
 	case effectuer_location:
 		_xdr_argument = (xdrproc_t) xdr_effectuerLocationParam;
-		_xdr_result = (xdrproc_t) xdr_location;
+		_xdr_result = (xdrproc_t) xdr_int;
 		local = (char *(*)(char *, struct svc_req *)) effectuer_location_1_svc;
 		break;
 
@@ -75,13 +74,13 @@ louetontel_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		break;
 
 	case afficher_nb_location:
-		_xdr_argument = (xdrproc_t) xdr_client;
+		_xdr_argument = (xdrproc_t) xdr_int;
 		_xdr_result = (xdrproc_t) xdr_void;
 		local = (char *(*)(char *, struct svc_req *)) afficher_nb_location_1_svc;
 		break;
 
 	case afficher_location:
-		_xdr_argument = (xdrproc_t) xdr_client;
+		_xdr_argument = (xdrproc_t) xdr_int;
 		_xdr_result = (xdrproc_t) xdr_void;
 		local = (char *(*)(char *, struct svc_req *)) afficher_location_1_svc;
 		break;
@@ -94,7 +93,7 @@ louetontel_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 
 	case effectuer_assurance:
 		_xdr_argument = (xdrproc_t) xdr_int;
-		_xdr_result = (xdrproc_t) xdr_assurance;
+		_xdr_result = (xdrproc_t) xdr_int;
 		local = (char *(*)(char *, struct svc_req *)) effectuer_assurance_1_svc;
 		break;
 
@@ -105,7 +104,7 @@ louetontel_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		break;
 
 	case afficher_garantie:
-		_xdr_argument = (xdrproc_t) xdr_assurance;
+		_xdr_argument = (xdrproc_t) xdr_void;
 		_xdr_result = (xdrproc_t) xdr_void;
 		local = (char *(*)(char *, struct svc_req *)) afficher_garantie_1_svc;
 		break;
@@ -118,7 +117,7 @@ louetontel_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 
 	case choisir_son_telephone:
 		_xdr_argument = (xdrproc_t) xdr_int;
-		_xdr_result = (xdrproc_t) xdr_telephone;
+		_xdr_result = (xdrproc_t) xdr_int;
 		local = (char *(*)(char *, struct svc_req *)) choisir_son_telephone_1_svc;
 		break;
 
@@ -130,7 +129,7 @@ louetontel_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 
 	case programmer_livraison:
 		_xdr_argument = (xdrproc_t) xdr_programmerLivraisonParam;
-		_xdr_result = (xdrproc_t) xdr_livraison;
+		_xdr_result = (xdrproc_t) xdr_int;
 		local = (char *(*)(char *, struct svc_req *)) programmer_livraison_1_svc;
 		break;
 
@@ -142,7 +141,7 @@ louetontel_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 
 	case modifier_livraison:
 		_xdr_argument = (xdrproc_t) xdr_modifierLivraisonParam;
-		_xdr_result = (xdrproc_t) xdr_livraison;
+		_xdr_result = (xdrproc_t) xdr_int;
 		local = (char *(*)(char *, struct svc_req *)) modifier_livraison_1_svc;
 		break;
 

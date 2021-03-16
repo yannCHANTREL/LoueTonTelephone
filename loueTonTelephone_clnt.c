@@ -24,45 +24,45 @@ allumer_application_1(void *argp, CLIENT *clnt)
 	return ((void *)&clnt_res);
 }
 
-client *
+int *
 enregistrer_client_1(enregistrerClientParam *argp, CLIENT *clnt)
 {
-	static client clnt_res;
+	static int clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, enregistrer_client,
 		(xdrproc_t) xdr_enregistrerClientParam, (caddr_t) argp,
-		(xdrproc_t) xdr_client, (caddr_t) &clnt_res,
+		(xdrproc_t) xdr_int, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
 	}
 	return (&clnt_res);
 }
 
-client *
+void *
 maj_information_client_1(majInformationClientParam *argp, CLIENT *clnt)
 {
-	static client clnt_res;
+	static char clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, maj_information_client,
 		(xdrproc_t) xdr_majInformationClientParam, (caddr_t) argp,
-		(xdrproc_t) xdr_client, (caddr_t) &clnt_res,
+		(xdrproc_t) xdr_void, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
 	}
-	return (&clnt_res);
+	return ((void *)&clnt_res);
 }
 
-location *
+int *
 effectuer_location_1(effectuerLocationParam *argp, CLIENT *clnt)
 {
-	static location clnt_res;
+	static int clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, effectuer_location,
 		(xdrproc_t) xdr_effectuerLocationParam, (caddr_t) argp,
-		(xdrproc_t) xdr_location, (caddr_t) &clnt_res,
+		(xdrproc_t) xdr_int, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
 	}
@@ -85,13 +85,13 @@ annuler_location_1(annulerLocationParam *argp, CLIENT *clnt)
 }
 
 void *
-afficher_nb_location_1(client *argp, CLIENT *clnt)
+afficher_nb_location_1(int *argp, CLIENT *clnt)
 {
 	static char clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, afficher_nb_location,
-		(xdrproc_t) xdr_client, (caddr_t) argp,
+		(xdrproc_t) xdr_int, (caddr_t) argp,
 		(xdrproc_t) xdr_void, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
@@ -100,13 +100,13 @@ afficher_nb_location_1(client *argp, CLIENT *clnt)
 }
 
 void *
-afficher_location_1(client *argp, CLIENT *clnt)
+afficher_location_1(int *argp, CLIENT *clnt)
 {
 	static char clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, afficher_location,
-		(xdrproc_t) xdr_client, (caddr_t) argp,
+		(xdrproc_t) xdr_int, (caddr_t) argp,
 		(xdrproc_t) xdr_void, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
@@ -129,15 +129,15 @@ modifier_location_1(modifierLocationParam *argp, CLIENT *clnt)
 	return (&clnt_res);
 }
 
-assurance *
+int *
 effectuer_assurance_1(int *argp, CLIENT *clnt)
 {
-	static assurance clnt_res;
+	static int clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, effectuer_assurance,
 		(xdrproc_t) xdr_int, (caddr_t) argp,
-		(xdrproc_t) xdr_assurance, (caddr_t) &clnt_res,
+		(xdrproc_t) xdr_int, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
 	}
@@ -160,13 +160,13 @@ afficher_type_assurance_1(void *argp, CLIENT *clnt)
 }
 
 void *
-afficher_garantie_1(assurance *argp, CLIENT *clnt)
+afficher_garantie_1(void *argp, CLIENT *clnt)
 {
 	static char clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, afficher_garantie,
-		(xdrproc_t) xdr_assurance, (caddr_t) argp,
+		(xdrproc_t) xdr_void, (caddr_t) argp,
 		(xdrproc_t) xdr_void, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
@@ -189,15 +189,15 @@ afficher_liste_telephone_1(void *argp, CLIENT *clnt)
 	return ((void *)&clnt_res);
 }
 
-telephone *
+int *
 choisir_son_telephone_1(int *argp, CLIENT *clnt)
 {
-	static telephone clnt_res;
+	static int clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, choisir_son_telephone,
 		(xdrproc_t) xdr_int, (caddr_t) argp,
-		(xdrproc_t) xdr_telephone, (caddr_t) &clnt_res,
+		(xdrproc_t) xdr_int, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
 	}
@@ -219,15 +219,15 @@ afficher_information_telephone_1(int *argp, CLIENT *clnt)
 	return ((void *)&clnt_res);
 }
 
-livraison *
+int *
 programmer_livraison_1(programmerLivraisonParam *argp, CLIENT *clnt)
 {
-	static livraison clnt_res;
+	static int clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, programmer_livraison,
 		(xdrproc_t) xdr_programmerLivraisonParam, (caddr_t) argp,
-		(xdrproc_t) xdr_livraison, (caddr_t) &clnt_res,
+		(xdrproc_t) xdr_int, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
 	}
@@ -249,15 +249,15 @@ annuler_livraison_1(annulerLivraisonParam *argp, CLIENT *clnt)
 	return ((void *)&clnt_res);
 }
 
-livraison *
+int *
 modifier_livraison_1(modifierLivraisonParam *argp, CLIENT *clnt)
 {
-	static livraison clnt_res;
+	static int clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, modifier_livraison,
 		(xdrproc_t) xdr_modifierLivraisonParam, (caddr_t) argp,
-		(xdrproc_t) xdr_livraison, (caddr_t) &clnt_res,
+		(xdrproc_t) xdr_int, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
 	}
