@@ -1,0 +1,41 @@
+Scénario de l'application LoueTonTelephone :
+
+1 - Gérard allume son application
+
+2 - Gérard s'enregistre en tant que nouveau client
+
+3 - Gérard s'est trompé dans l'écriture de son adresse, il met à jour ses informations
+
+4 - Gérard souhaite un téléphone. Il veux avoir la liste de ceux disponibles
+
+5 - Gérard hésite à prendre le téléphone Galaxy S20. Il demande d'avantage d'informations sur ce téléphone
+
+6 - Gérard est intéressé par le téléphone Galaxy S20. Il choisit donc ce téléphone
+
+7 - Gérard souhaite connaître les assurances disponibles
+
+8 - Gérard souhaite connaître les détails de la garantie
+
+9 - Gérard souhaite prendre une assurance payable en mensualité
+
+10 - Gérard souhaite faire une location du téléphone Galaxy S20 avec assurance payable en mensualité
+
+11 - Gérard souhaite faire une deuxième location d'un téléphone Galaxy S20 avec assurance payable en mensualité
+
+12 - Gérard se rend compte qu'un seul téléphone Galaxy S20 lui suffit. Il veut annuler sa précédente location
+
+13 - Après des recherches personnelles, Gérard ce rend compte que le téléphone Galaxy S20+ lui correspondrait mieux, il choisit ce téléphone
+
+15 - Gerard veux modifié sa première location pour loué le téléphone GalaxyS20+
+
+16 - Gérard souhaite vérifier qu'il n'a pas deux locations en cours, c'est pourquoi il regarde combien il a de locations en cours
+
+17 - Gérard souhaite afficher sa location pour s'assure que la location est correct à sa demande
+
+18 - Gérard veux maintenant commander la location qu'il a préparer
+
+19 - Gérard à changer d'avis, il reviens sur son choix au dernier moment et prend un Galaxy S20. il choisit ce téléphone
+
+20 - Gérard souhaite modifié sa livraison en conséquence
+
+21 - Gérard pense finalement qu'un téléphone ne lui est pas utile. Il annule la livraison

@@ -35,13 +35,13 @@ void louetontel_prog_1(char *host) {
 	printf("\nGérard s'enregistre en tant que nouveau client\n");
 	// PARAM
 	enregistrerClientParam enregistrer_client_1_arg;
-	enregistrer_client_1_arg = 0;
+	enregistrer_client_1_arg.idClient = 0;
 	strcpy(enregistrer_client_1_arg.nom,"gerard");
 	strcpy(enregistrer_client_1_arg.adresse,"5 bis");
 	// EXECUTION
-	int * gerard = enregistrer_client_1(&enregistrer_client_1_arg, clnt);
+	int * idGerard = enregistrer_client_1(&enregistrer_client_1_arg, clnt);
 	// TRAITEMENT
-	if (gerard == (int *) NULL) {
+	if (idGerard == (int *) NULL) {
 		clnt_perror (clnt, "enregistrer_client_1 call failed\n");
 	} else {
 		printf("enregistrer_client_1 OK\n");
@@ -50,7 +50,7 @@ void louetontel_prog_1(char *host) {
 	printf("\nGérard s'est trompé dans l'écriture de son adresse, il met à jour ses informations\n");
 	// PARAM
 	majInformationClientParam maj_information_client_1_arg;
-	maj_information_client_1_arg.idClient = *gerard;
+	maj_information_client_1_arg.idClient = *idGerard;
 	strcpy(maj_information_client_1_arg.nom,"gerard");
 	strcpy(maj_information_client_1_arg.adresse,"10 bis");
 	// EXECUTION
@@ -76,7 +76,7 @@ void louetontel_prog_1(char *host) {
 	
 	printf("\nGérard hésite à prendre le téléphone Galaxy S20. Il demande d'avantage d'informations sur ce téléphone\n");
 	// PARAM
-	int afficher_information_telephone_1_arg = 1;
+	int afficher_information_telephone_1_arg = 2;
 	// EXECUTION
 	void * result_5 = afficher_information_telephone_1((void*)&afficher_information_telephone_1_arg, clnt);
 	// TRAITEMENT
@@ -88,11 +88,11 @@ void louetontel_prog_1(char *host) {
 	
 	printf("\nGérard est intéressé par le téléphone Galaxy S20. Il choisit donc ce téléphone\n");
 	// PARAM
-	int choisir_son_telephone_1_arg = 1;
+	int choisir_son_telephone_1_arg = 2;
 	// EXECUTION
-	int * galaxyS20 = choisir_son_telephone_1((void*)&choisir_son_telephone_1_arg, clnt);
+	int * idGalaxyS20 = choisir_son_telephone_1((void*)&choisir_son_telephone_1_arg, clnt);
 	// TRAITEMENT
-	if (result_6 == (int *) NULL) {
+	if (idGalaxyS20 == (int *) NULL) {
 		clnt_perror (clnt, "choisir_son_telephone_1 call failed\n");
 	} else {
 		printf("choisir_son_telephone_1 OK\n");
@@ -126,9 +126,9 @@ void louetontel_prog_1(char *host) {
 	// PARAM
 	int effectuer_assurance_1_arg = 1;
 	// EXECUTION
-	int * assurance = effectuer_assurance_1((void*)&effectuer_assurance_1_arg, clnt);
+	int * idAssurance = effectuer_assurance_1((void*)&effectuer_assurance_1_arg, clnt);
 	// TRAITEMENT
-	if (result_9 == (int *) NULL) {
+	if (idAssurance == (int *) NULL) {
 		clnt_perror (clnt, "effectuer_assurance_1 call failed\n");
 	} else {
 		printf("effectuer_assurance_1 OK\n");
@@ -137,23 +137,38 @@ void louetontel_prog_1(char *host) {
 	printf("\nGérard souhaite faire une location du téléphone Galaxy S20 avec assurance payable en mensualité\n");
 	// PARAM
 	effectuerLocationParam effectuer_location_1_arg;
-	effectuer_location_1_arg.idTel = galaxyS20;
-	effectuer_location_1_arg.idClient = gerard;
-	effectuer_location_1_arg.idAssu = assurance;
+	effectuer_location_1_arg.idTel = *idGalaxyS20;
+	effectuer_location_1_arg.idClient = *idGerard;
+	effectuer_location_1_arg.idAssu = *idAssurance;
 	// EXECUTION
-	int * location = effectuer_location_1((void*) effectuer_location_1_arg, clnt);
+	int * idLocation = effectuer_location_1(&effectuer_location_1_arg, clnt);
 	// TRAITEMENT
-	if (result_10 == (int *) NULL) {
+	if (idLocation == (int *) NULL) {
 		clnt_perror (clnt, "effectuer_location_1 call failed\n");
 	} else {
 		printf("effectuer_location_1 OK\n");
 	}
 	
-	printf("\nAprès des recherches personnelles, Gérard se rend compte que le téléphone Galaxy S20+ lui correspondrait mieux. Il veut annuler sa précédente location\n");
+	printf("\nGérard souhaite faire une deuxième location d'un téléphone Galaxy S20 avec assurance payable en mensualité\n");
+	// PARAM
+	effectuerLocationParam effectuer_location_1_arg2;
+	effectuer_location_1_arg2.idTel = *idGalaxyS20;
+	effectuer_location_1_arg2.idClient = *idGerard;
+	effectuer_location_1_arg2.idAssu = *idAssurance;
+	// EXECUTION
+	int * idLocation2 = effectuer_location_1(&effectuer_location_1_arg2, clnt);
+	// TRAITEMENT
+	if (idLocation2 == (int *) NULL) {
+		clnt_perror (clnt, "effectuer_location_1 n°2 call failed\n");
+	} else {
+		printf("effectuer_location_1 n°2 OK\n");
+	}
+	
+	printf("\nGérard se rend compte qu'un seul téléphone Galaxy S20 lui suffit. Il veut annuler sa précédente location\n");
 	// PARAM
 	annulerLocationParam annuler_location_1_arg;
-	annuler_location_1_arg.idLoc = location;
-	annuler_location_1_arg.idClient = gerard;
+	annuler_location_1_arg.idLoc = *idLocation2;
+	annuler_location_1_arg.idClient = *idGerard;
 	// EXECUTION
 	void * result_11 = annuler_location_1((void*)&annuler_location_1_arg, clnt);
 	// TRAITEMENT
@@ -163,91 +178,111 @@ void louetontel_prog_1(char *host) {
 		printf("annuler_location_1 OK\n");
 	}
 	
-	printf("\nGérard souhaite faire une location du téléphone Galaxy S20+ avec assurance payable en mensualité\n");
+	printf("\nAprès des recherches personnelles, Gérard ce rend compte que le téléphone Galaxy S20+ lui correspondrait mieux, il choisit ce téléphone\n");
 	// PARAM
-	effectuerLocationParam effectuer_location_1_arg2;
-	effectuer_location_1_arg2.idTel = 2;
-	effectuer_location_1_arg2.idClient = gerard;
-	effectuer_location_1_arg2.idAssu = assurance;
+	int choisir_son_telephone_1_arg2 = 3;
 	// EXECUTION
-	int * newLocation = effectuer_location_1((void*)&effectuer_location_1_arg2, clnt);
+	int * idTel = choisir_son_telephone_1((void*)&choisir_son_telephone_1_arg2, clnt);
 	// TRAITEMENT
-	if (result_12 != (int *) NULL) {
-		clnt_perror (clnt, "effectuer_location_1 call failed\n");
+	if (idTel == (int *) NULL) {
+		clnt_perror (clnt, "choisir_son_telephone_1 n°2 call failed\n");
 	} else {
-		printf("effectuer_location_1 OK\n");
+		printf("choisir_son_telephone_1 n°2 OK\n");
 	}
 	
-	/*printf("\nGérard souhaite savoir combien il a de locations en cours\n");
-	
-	printf("\nGérard souhaite afficher ses locations\n");
+	printf("\nGerard veux modifié sa première location pour loué le téléphone GalaxyS20+\n");
 	// PARAM
-	client afficher_location_1_arg = result_3;
+	modifierLocationParam modifier_location_1_arg;
+	effectuer_location_1_arg.idTel = *idTel;
+	effectuer_location_1_arg.idClient = *idGerard;
+	effectuer_location_1_arg.idAssu = *idAssurance;
 	// EXECUTION
-	void * result_13 = afficher_location_1((void*)&afficher_location_1_arg, clnt);
+	void * result_12 = modifier_location_1((void*)&effectuer_location_1_arg, clnt);
 	// TRAITEMENT
-	if (result_13 != (void *) NULL) {
+	if (result_12 == (void *) NULL) {
+		clnt_perror (clnt, "modifier_location_1 call failed\n");
+	} else {
+		printf("modifier_location_1 OK\n");
+	}
+	
+	printf("\nGérard souhaite vérifier qu'il n'a pas deux locations en cours, c'est pourquoi il regarde combien il a de locations en cours\n");
+	// PARAM
+	int afficher_nb_location_1_arg = *idGerard;
+	// EXECUTION
+	void * result_13 = afficher_nb_location_1((void*)&afficher_nb_location_1_arg, clnt);
+	// TRAITEMENT
+	if (result_13 == (void *) NULL) {
+		clnt_perror (clnt, "afficher_nb_location_1 call failed\n");
+	} else {
+		printf("afficher_nb_location_1 OK\n");
+	}
+	
+	printf("\nGérard souhaite afficher sa location pour s'assure que la location est correct à sa demande\n");
+	// PARAM
+	int afficher_location_1_arg = *idGerard;
+	// EXECUTION
+	void * result_14 = afficher_location_1((void*)&afficher_location_1_arg, clnt);
+	// TRAITEMENT
+	if (result_14 == (void *) NULL) {
 		clnt_perror (clnt, "afficher_location_1 call failed\n");
 	} else {
 		printf("afficher_location_1 OK\n");
-	}*/
+	}
 	
-	/*result_4 = effectuer_location_1(&effectuer_location_1_arg, clnt);
-	if (result_4 == (location *) NULL) {
-		clnt_perror (clnt, "call failed");
+	printf("\nGérard veux maintenant commander la location qu'il a préparer\n");
+	// PARAM
+	programmerLivraisonParam programmer_livraison_1_arg;
+	programmer_livraison_1_arg.idClient = *idGerard;
+	programmer_livraison_1_arg.idTel = *idTel;
+	// EXECUTION
+	int * idLivraison = programmer_livraison_1((void*)&programmer_livraison_1_arg, clnt);
+	// TRAITEMENT
+	if (idLivraison == (void *) NULL) {
+		clnt_perror (clnt, "programmer_livraison_1 call failed\n");
+	} else {
+		printf("programmer_livraison_1 OK\n");
 	}
-	result_5 = annuler_location_1(&annuler_location_1_arg, clnt);
-	if (result_5 == (void *) NULL) {
-		clnt_perror (clnt, "call failed");
+	
+	printf("\nGérard à changer d'avis, il reviens sur son choix au dernier moment et prend un Galaxy S20. il choisit ce téléphone\n");
+	// PARAM
+	int choisir_son_telephone_1_arg3 = 2;
+	// EXECUTION
+	int * idTel2 = choisir_son_telephone_1((void*)&choisir_son_telephone_1_arg3, clnt);
+	// TRAITEMENT
+	if (idTel2 == (int *) NULL) {
+		clnt_perror (clnt, "choisir_son_telephone_1 n°3 call failed\n");
+	} else {
+		printf("choisir_son_telephone_1 n°3 OK\n");
 	}
-	result_6 = afficher_nb_location_1(&afficher_nb_location_1_arg, clnt);
-	if (result_6 == (void *) NULL) {
-		clnt_perror (clnt, "call failed");
+	
+	printf("\nGérard souhaite modifié sa livraison en conséquence\n");
+	// PARAM
+	modifierLivraisonParam modifier_livraison_1_arg;
+	modifier_livraison_1_arg.idClient = *idGerard;
+	modifier_livraison_1_arg.idTel = *idTel2;
+	modifier_livraison_1_arg.idLiv = *idLivraison;
+	// EXECUTION
+	void * result_15 = modifier_livraison_1((void*)&modifier_livraison_1_arg, clnt);
+	// TRAITEMENT
+	if (result_15 == (void *) NULL) {
+		clnt_perror (clnt, "modifier_livraison_1 call failed\n");
+	} else {
+		printf("modifier_livraison_1 OK\n");
 	}
-	result_7 = afficher_location_1(&afficher_location_1_arg, clnt);
-	if (result_7 == (void *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_8 = modifier_location_1(&modifier_location_1_arg, clnt);
-	if (result_8 == (location *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_9 = effectuer_assurance_1(&effectuer_assurance_1_arg, clnt);
-	if (result_9 == (assurance *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_10 = afficher_type_assurance_1((void*)&afficher_type_assurance_1_arg, clnt);
-	if (result_10 == (void *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_11 = afficher_garantie_1(&afficher_garantie_1_arg, clnt);
-	if (result_11 == (void *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_12 = afficher_liste_telephone_1((void*)&afficher_liste_telephone_1_arg, clnt);
-	if (result_12 == (void *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_13 = choisir_son_telephone_1(&choisir_son_telephone_1_arg, clnt);
-	if (result_13 == (telephone *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_14 = afficher_information_telephone_1(&afficher_information_telephone_1_arg, clnt);
-	if (result_14 == (void *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_15 = programmer_livraison_1(&programmer_livraison_1_arg, clnt);
-	if (result_15 == (livraison *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_16 = annuler_livraison_1(&annuler_livraison_1_arg, clnt);
+	
+	printf("\nGérard pense finalement qu'un téléphone ne lui est pas utile. Il annule la livraison\n");
+	// PARAM
+	annulerLivraisonParam annuler_livraison_1_arg;
+	annuler_livraison_1_arg.idLiv = *idLivraison;
+	annuler_livraison_1_arg.idClient = *idGerard;
+	// EXECUTION
+	void * result_16 = annuler_livraison_1((void*)&annuler_livraison_1_arg, clnt);
+	// TRAITEMENT
 	if (result_16 == (void *) NULL) {
-		clnt_perror (clnt, "call failed");
+		clnt_perror (clnt, "annuler_livraison_1 call failed\n");
+	} else {
+		printf("annuler_livraison_1 OK\n");
 	}
-	result_17 = modifier_livraison_1(&modifier_livraison_1_arg, clnt);
-	if (result_17 == (livraison *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}*/
 #ifndef	DEBUG
 	clnt_destroy (clnt);
 #endif	 /* DEBUG */

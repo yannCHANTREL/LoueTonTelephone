@@ -36,6 +36,7 @@ void * allumer_application_1_svc(void *argp, struct svc_req *rqstp) {
 	info1.memoire = 128;
 	info1.qualiteCamera = 8;
 	strcpy(info1.systemeExploitation,"Android Nougat");
+	listeInformation[1] = info1;
 	
 	information info2;
 	info2.id = 2;
@@ -46,6 +47,7 @@ void * allumer_application_1_svc(void *argp, struct svc_req *rqstp) {
 	info2.memoire = 128;
 	info2.qualiteCamera = 10;
 	strcpy(info2.systemeExploitation,"Android Oréo");
+	listeInformation[2] = info2;
 	
 	information info3;
 	info3.id = 3;
@@ -56,36 +58,37 @@ void * allumer_application_1_svc(void *argp, struct svc_req *rqstp) {
 	info3.memoire = 256;
 	info3.qualiteCamera = 10;
 	strcpy(info3.systemeExploitation,"Android Oréo");
+	listeInformation[3] = info3;
 	
 	telephone tel1;
 	tel1.id = 1;
 	strcpy(tel1.appareil,"Galaxy S20 FE");
 	tel1.prix = 659.0;
 	tel1.idInfo = 1;
-	listeTelephone[0] = tel1;
+	listeTelephone[1] = tel1;
 	
 	telephone tel2;
 	tel2.id = 2;
 	strcpy(tel2.appareil,"Galaxy S20");
 	tel2.prix = 909.0;
 	tel2.idInfo = 2;
-	listeTelephone[1] = tel2;
+	listeTelephone[2] = tel2;
 	
 	telephone tel3;
 	tel3.id = 3;
 	strcpy(tel3.appareil,"Galaxy S20+");
 	tel3.prix = 1009.0;
 	tel3.idInfo = 3;
-	listeTelephone[2] = tel3;
+	listeTelephone[3] = tel3;
 	
-	printf("allumer_application - L'application est prête à être utilisé\n");
+	printf("\nallumer_application - L'application est prête à être utilisé\n");
 }
 
 int * enregistrer_client_1_svc(enregistrerClientParam *argp, struct svc_req *rqstp) {
 	enregistrerClientParam monClient = *argp;
 	int idClient = monClient.idClient;
 	
-	if (idClient > nbClient) {
+	if (nbClient >= idClient) {
 		// Création du nouveau client	
 		client newClient;
 		newClient.id = idClient;
@@ -95,7 +98,7 @@ int * enregistrer_client_1_svc(enregistrerClientParam *argp, struct svc_req *rqs
 		listeClient[idClient] = newClient;
 		nbClient++;
 		// On retourne le nouveau client
-		printf("enregistrer_client - Le client numéro %d, nommé %s a été crée\n",idClient,newClient.nom);
+		printf("\nenregistrer_client - Le client numéro %d, nommé %s a été crée\n",idClient,newClient.nom);
 	}
 	return &argp->idClient;
 }
@@ -107,8 +110,9 @@ void * maj_information_client_1_svc(majInformationClientParam *argp, struct svc_
 		// On met a jour ses informations
 		strcpy(unClient.nom,data.nom);
 		strcpy(unClient.adresse,data.adresse);
+		listeClient[data.idClient] = unClient;
 		// On retourne le client modifié
-		printf("maj_information_client - Vous avez modifié le client numéro %d\n",data.idClient);
+		printf("\nmaj_information_client - Vous avez modifié le client numéro %d\n",data.idClient);
 	}
 }
 
@@ -133,7 +137,7 @@ int * effectuer_location_1_svc(effectuerLocationParam *argp, struct svc_req *rqs
 	client unClient = listeClient[data.idClient];
 	assurance uneAssurance = listeAssurance[data.idAssu];
 	telephone tel = listeTelephone[data.idTel];
-	printf("effectuer_location - Le client nommé %s a crée une nouvelle location pour le téléphone nommé %s. Celle-ci prend effet immédiatement. Le téléphone est assuré pendant %d mois\n",unClient.nom,tel.appareil,uneAssurance.duree);
+	printf("\neffectuer_location - Le client nommé %s a crée une nouvelle location pour le téléphone nommé %s. Celle-ci prend effet immédiatement. Le téléphone est assuré pendant %d mois\n",unClient.nom,tel.appareil,uneAssurance.duree);
 	return &idLocation;
 }
 
@@ -149,7 +153,7 @@ void * annuler_location_1_svc(annulerLocationParam *argp, struct svc_req *rqstp)
 		location loc;
 		listeLocation[i] = loc;
 		nbLocation--;
-		printf("annuler_location - Le client nommé %s a annulé la location numéro %d\n",unClient.nom,data.idLoc);
+		printf("\nannuler_location - Le client nommé %s a annulé la location numéro %d\n",unClient.nom,data.idLoc);
 	}
 }
 
@@ -157,14 +161,14 @@ void * afficher_nb_location_1_svc(int *argp, struct svc_req *rqstp) {
 	client monClient = listeClient[*argp];
 	int nbLocationEnCours = 0;
 	// Recherche du nombre de lacoation en cours pour ce client
-	for (int i = 0; i < nbLocation; i++) {
+	for (int i = 1; i < nbLocation+1; i++) {
 		location locationActuel = listeLocation[i];
 		if (locationActuel.idClient == *argp && locationActuel.enCours == 1) {
 			nbLocationEnCours++;
 		}
 	}
 	// Affichage du nombre de location en cours pour ce client
-	printf("afficher_nb_location - Le client nommé %s a %d location en cours\n",monClient.nom,nbLocationEnCours);
+	printf("\nafficher_nb_location - Le client nommé %s a %d location en cours\n",monClient.nom,nbLocationEnCours);
 }
 
 void * afficher_location_1_svc(int *argp, struct svc_req *rqstp) {
@@ -187,7 +191,7 @@ void * afficher_location_1_svc(int *argp, struct svc_req *rqstp) {
 			} else if (assu.modePaiement == 2) {
 				typeAssurance = "avec assurance (paiement unique)"; 
 			}
-			printf("afficher_location - Le client nommé %s a la location suviante :\nNuméro : %d - Téléphone : %s - Date de début : %s - En cours : %s - Type d'assurance : %s\n\n",monClient.nom,locationActuel.id,tel.appareil,locationActuel.date,enCours,typeAssurance);
+			printf("\nafficher_location - Le client nommé %s a la location suviante :\nNuméro : %d - Téléphone : %s - Date de début : %s - En cours : %s - Type d'assurance : %s\n\n",monClient.nom,locationActuel.id,tel.appareil,locationActuel.date,enCours,typeAssurance);
 		}
 	}	
 }
@@ -210,7 +214,7 @@ void * modifier_location_1_svc(modifierLocationParam *argp, struct svc_req *rqst
 		client unClient = listeClient[data.idClient];
 		assurance uneAssurance = listeAssurance[data.idAssu];
 		telephone tel = listeTelephone[data.idTel];
-		printf("modifier_location - Le client nommé %s a modifié la location numéro %d, lui attribuant le téléphone nommé %s. Celle-ci prend effet immédiatement, et ce terminera dans %d\n",unClient.nom,newLocation.id,tel.appareil,uneAssurance.duree);
+		printf("\nmodifier_location - Le client nommé %s a modifié la location numéro %d, lui attribuant le téléphone nommé %s. Celle-ci prend effet immédiatement, et ce terminera dans %d\n",unClient.nom,newLocation.id,tel.appareil,uneAssurance.duree);
 	}
 }
 
@@ -225,15 +229,15 @@ int * effectuer_assurance_1_svc(int *argp, struct svc_req *rqstp) {
 	if (modePaiement == 1) {
 		newAssurance.prix = 4.99;
 		newAssurance.duree = 24;
-		printf("effectuer_assurance - Une nouvelle assurance a été crée, payable en mensualité\n");
+		printf("\neffectuer_assurance - Une nouvelle assurance a été crée, payable en mensualité\n");
 	} else if (modePaiement == 2) {
 		newAssurance.prix = 89.00;
 		newAssurance.duree = 24;
-		printf("effectuer_assurance - Une nouvelle assurance a été crée, paiement unique\n");
+		printf("\neffectuer_assurance - Une nouvelle assurance a été crée, paiement unique\n");
 	} else {
 		newAssurance.prix = 0.0;
 		newAssurance.duree = 0;
-		printf("effectuer_assurance - Assurance non assurée\n");
+		printf("\neffectuer_assurance - Assurance non assurée\n");
 	}
 	// On met a jour les infos
 	listeAssurance[idAssu] = newAssurance;
@@ -242,25 +246,25 @@ int * effectuer_assurance_1_svc(int *argp, struct svc_req *rqstp) {
 }
 
 void * afficher_type_assurance_1_svc(void *argp, struct svc_req *rqstp) {
-	printf("afficher_type_assurance - Il existe trois types d'assurances :\n - assurance avec paiement mensuel\n - assurance avec paiement unique\n - sans assurance\n");
+	printf("\nafficher_type_assurance - Il existe trois types d'assurances :\n - assurance avec paiement mensuel\n - assurance avec paiement unique\n - sans assurance\n");
 }
 
 void * afficher_garantie_1_svc(void *argp, struct svc_req *rqstp) {
-	printf("afficher_garantie - Prendre une assurance vous octroie une protection contre tout vol ou dommage fait à votre appareil, à condition que celle-ci puissent être justifié. La garantie est valable pendant 24 mois.\n");
+	printf("\nafficher_garantie - Prendre une assurance vous octroie une protection contre tout vol ou dommage fait à votre appareil, à condition que celle-ci puissent être justifié. La garantie est valable pendant 24 mois.\n");
 }
 
 void * afficher_liste_telephone_1_svc(void *argp, struct svc_req *rqstp) {
-	printf("afficher_liste_telephone - Les téléphones disponibles sont les suivants :\n");
-	for (int i = 0; i < 3; i++) {
+	printf("\nafficher_liste_telephone - Les téléphones disponibles sont les suivants :\n");
+	for (int i = 1; i < 4; i++) {
 		telephone telActuel = listeTelephone[i];
-		printf("mobile numéro %d - Nom : %s - Prix de l'appreil : %f\n",telActuel.id,telActuel.appareil,telActuel.prix);
+		printf("mobile numéro %d - Nom : %s - Prix de l'appreil : %.2f\n",telActuel.id,telActuel.appareil,telActuel.prix);
 	}
 }
 
 int * choisir_son_telephone_1_svc(int *argp, struct svc_req *rqstp) {
 	int idTel = *argp;
-	telephone tel = listeTelephone[idTel-1];
-	printf("choisir_son_telephone - Vous avez choisi le téléphone numéro %d, nommé %s\n",*argp,tel.appareil);
+	telephone tel = listeTelephone[idTel];
+	printf("\nchoisir_son_telephone - Vous avez choisi le téléphone numéro %d, nommé %s\n",*argp,tel.appareil);
 	return argp;
 }
 
@@ -268,17 +272,17 @@ void * afficher_information_telephone_1_svc(int *argp, struct svc_req *rqstp) {
 	// On récupère le téléphone
 	telephone tel = listeTelephone[*argp];
 	information info;
-	for (int i = 0; i < 3; i++) {
+	for (int i = 1; i < 4; i++) {
 		information infoActuel = listeInformation[i];
 		if (infoActuel.id == tel.idInfo) {
 			info = infoActuel;
 		}
 	}
-	printf("afficher_information_telephone - Téléphone numéro %d : Informations générale :\n",*argp);
+	printf("\nafficher_information_telephone - Téléphone numéro %d : Informations générale :\n",*argp);
 	// on communique chaque informations du téléphone
 	printf("Processeur : %s\n",info.processeur);
 	printf("RAM : %d Go\n",info.ram);
-	printf("Taille de l'écran : %f pouces\n",info.tailleEcran);
+	printf("Taille de l'écran : %.2f pouces\n",info.tailleEcran);
 	printf("Autonomie estimé : %d heures\n",info.autonomie);
 	printf("Mémoire interne : %d Go\n",info.memoire);
 	printf("Résolution de la caméra : %d mégapixels\n",info.qualiteCamera);
@@ -301,7 +305,7 @@ int * programmer_livraison_1_svc(programmerLivraisonParam *argp, struct svc_req 
 	// Affichage
 	client clt = listeClient[data.idClient];
 	telephone tel = listeTelephone[data.idTel];
-	printf("programmer_livraison - La livraison à bien été crée. Le client nommé %s recevera sont téléphone %s sous 24h, à l'adresse %s\n Merci d'avoir commandé sur LoueTonTelephone !\n",clt.nom,tel.appareil,clt.adresse);
+	printf("\nprogrammer_livraison - La livraison à bien été crée. Le client nommé %s recevera sont téléphone %s sous 24h, à l'adresse %s\n Merci d'avoir commandé sur LoueTonTelephone !\n",clt.nom,tel.appareil,clt.adresse);
 	return &idLiv;
 }
 
@@ -320,7 +324,7 @@ void * annuler_livraison_1_svc(annulerLivraisonParam *argp, struct svc_req *rqst
 		
 		// Affichage
 		client unClient = listeClient[data.idClient];
-		printf("annuler_livraison - Le client numéro %d, nommé %s a annulé la livraison numéro %d\n",data.idClient,unClient.nom,data.idLiv);
+		printf("\nannuler_livraison - Le client numéro %d, nommé %s a annulé la livraison numéro %d\n",data.idClient,unClient.nom,data.idLiv);
 	}	
 }
 
@@ -334,9 +338,10 @@ void * modifier_livraison_1_svc(modifierLivraisonParam *argp, struct svc_req *rq
 		newLivraison.idTel = data.idTel;
 		newLivraison.enCours = 1;
 		listeLivraison[data.idLiv] = newLivraison;
-	
+		
 		client clt = listeClient[data.idClient];
+		printf("data.idTel %d\n",data.idTel);
 		telephone tel = listeTelephone[data.idTel];
-		printf("modifier_livraison - Le client nommé %s a modifié la livraison numéro %d, lui attribuant le téléphone numéro %d, nommé %s. Le téléphone sera livré, sous un délais de 24h maximum, à l'adresse %s.\n",clt.nom,data.idLiv,data.idTel,tel.appareil,clt.adresse);
+		printf("\nmodifier_livraison - Le client nommé %s a modifié la livraison numéro %d, lui attribuant le téléphone numéro %d, nommé %s. Le téléphone sera livré, sous un délais de 24h maximum, à l'adresse %s.\n",clt.nom,data.idLiv,data.idTel,tel.appareil,clt.adresse);
 	}
 }

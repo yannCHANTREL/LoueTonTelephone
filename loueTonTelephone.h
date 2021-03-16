@@ -95,9 +95,9 @@ struct annulerLocationParam {
 typedef struct annulerLocationParam annulerLocationParam;
 
 struct modifierLocationParam {
+	int idLoc;
 	int idTel;
 	int idClient;
-	int idLoc;
 	int idAssu;
 };
 typedef struct modifierLocationParam modifierLocationParam;
@@ -147,8 +147,8 @@ extern  void * afficher_nb_location_1_svc(int *, struct svc_req *);
 extern  void * afficher_location_1(int *, CLIENT *);
 extern  void * afficher_location_1_svc(int *, struct svc_req *);
 #define modifier_location 8
-extern  location * modifier_location_1(modifierLocationParam *, CLIENT *);
-extern  location * modifier_location_1_svc(modifierLocationParam *, struct svc_req *);
+extern  void * modifier_location_1(modifierLocationParam *, CLIENT *);
+extern  void * modifier_location_1_svc(modifierLocationParam *, struct svc_req *);
 #define effectuer_assurance 9
 extern  int * effectuer_assurance_1(int *, CLIENT *);
 extern  int * effectuer_assurance_1_svc(int *, struct svc_req *);
@@ -174,8 +174,8 @@ extern  int * programmer_livraison_1_svc(programmerLivraisonParam *, struct svc_
 extern  void * annuler_livraison_1(annulerLivraisonParam *, CLIENT *);
 extern  void * annuler_livraison_1_svc(annulerLivraisonParam *, struct svc_req *);
 #define modifier_livraison 17
-extern  int * modifier_livraison_1(modifierLivraisonParam *, CLIENT *);
-extern  int * modifier_livraison_1_svc(modifierLivraisonParam *, struct svc_req *);
+extern  void * modifier_livraison_1(modifierLivraisonParam *, CLIENT *);
+extern  void * modifier_livraison_1_svc(modifierLivraisonParam *, struct svc_req *);
 extern int louetontel_prog_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
 
 #else /* K&R C */
@@ -201,8 +201,8 @@ extern  void * afficher_nb_location_1_svc();
 extern  void * afficher_location_1();
 extern  void * afficher_location_1_svc();
 #define modifier_location 8
-extern  location * modifier_location_1();
-extern  location * modifier_location_1_svc();
+extern  void * modifier_location_1();
+extern  void * modifier_location_1_svc();
 #define effectuer_assurance 9
 extern  int * effectuer_assurance_1();
 extern  int * effectuer_assurance_1_svc();
@@ -228,8 +228,8 @@ extern  int * programmer_livraison_1_svc();
 extern  void * annuler_livraison_1();
 extern  void * annuler_livraison_1_svc();
 #define modifier_livraison 17
-extern  int * modifier_livraison_1();
-extern  int * modifier_livraison_1_svc();
+extern  void * modifier_livraison_1();
+extern  void * modifier_livraison_1_svc();
 extern int louetontel_prog_1_freeresult ();
 #endif /* K&R C */
 

@@ -87,7 +87,7 @@ louetontel_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 
 	case modifier_location:
 		_xdr_argument = (xdrproc_t) xdr_modifierLocationParam;
-		_xdr_result = (xdrproc_t) xdr_location;
+		_xdr_result = (xdrproc_t) xdr_void;
 		local = (char *(*)(char *, struct svc_req *)) modifier_location_1_svc;
 		break;
 
@@ -141,7 +141,7 @@ louetontel_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 
 	case modifier_livraison:
 		_xdr_argument = (xdrproc_t) xdr_modifierLivraisonParam;
-		_xdr_result = (xdrproc_t) xdr_int;
+		_xdr_result = (xdrproc_t) xdr_void;
 		local = (char *(*)(char *, struct svc_req *)) modifier_livraison_1_svc;
 		break;
 
